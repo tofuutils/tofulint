@@ -20,13 +20,13 @@ import (
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/terraform-linters/tflint/plugin"
 	"github.com/terraform-linters/tflint/terraform"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 // NewHandler returns a new JSON-RPC handler
-func NewHandler(configPath string, cliConfig *tflint.Config) (jsonrpc2.Handler, *plugin.Plugin, error) {
+func NewHandler(configPath string, cliConfig *tofulint.Config) (jsonrpc2.Handler, *plugin.Plugin, error) {
 	cfg, err := tflint.LoadConfig(afero.Afero{Fs: afero.NewOsFs()}, configPath)
 	if err != nil {
 		return nil, nil, err
@@ -91,8 +91,8 @@ func NewHandler(configPath string, cliConfig *tflint.Config) (jsonrpc2.Handler, 
 
 type handler struct {
 	configPath        string
-	cliConfig         *tflint.Config
-	config            *tflint.Config
+	cliConfig         *tofulint.Config
+	config            *tofulint.Config
 	fs                afero.Fs
 	rootDir           string
 	plugin            *plugin.Plugin

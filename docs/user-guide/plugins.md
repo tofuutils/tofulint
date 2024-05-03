@@ -1,6 +1,6 @@
 # Configuring Plugins
 
-You can extend TFLint by installing any plugin. Declare plugins you want to use in the config file as follows:
+You can extend TofuLint by installing any plugin. Declare plugins you want to use in the config file as follows:
 
 ```hcl
 plugin "foo" {
@@ -19,22 +19,22 @@ plugin "foo" {
 }
 ```
 
-After declaring the `version` and `source`, `tflint --init` can automatically install the plugin.
+After declaring the `version` and `source`, `tofulint --init` can automatically install the plugin.
 
 ```console
-$ tflint --init
+$ tofulint --init
 Installing "foo" plugin...
 Installed "foo" (source: github.com/org/tflint-ruleset-foo, version: 0.1.0)
-$ tflint -v
-TFLint version 0.28.1
+$ tofulint -v
+TofuLint version 0.28.1
 + ruleset.foo (0.1.0)
 ```
 
-See also [Configuring TFLint](config.md) for the config file schema.
+See also [Configuring TofuLint](config.md) for the config file schema.
 
 ## Attributes
 
-This section describes the attributes reserved by TFLint. Except for these, each plugin can extend the schema by defining any attributes/blocks. See the documentation for each plugin for details.
+This section describes the attributes reserved by TofuLint. Except for these, each plugin can extend the schema by defining any attributes/blocks. See the documentation for each plugin for details.
 
 ### `enabled` (required)
 
@@ -50,33 +50,33 @@ Plugin version. Do not prefix with "v". This attribute cannot be omitted when th
 
 ### `signing_key`
 
-Plugin developer's PGP public signing key. When this attribute is set, TFLint will automatically verify the signature of the checksum file downloaded from GitHub. It is recommended to set it to prevent supply chain attacks.
+Plugin developer's PGP public signing key. When this attribute is set, TofuLint will automatically verify the signature of the checksum file downloaded from GitHub. It is recommended to set it to prevent supply chain attacks.
 
 Plugins under the terraform-linters organization (AWS/GCP/Azure ruleset plugins) can use the built-in signing key, so this attribute can be omitted.
 
 ## Plugin directory
 
-Plugins are usually installed under `~/.tflint.d/plugins`. Exceptionally, if you already have `./.tflint.d/plugins` in your working directory, it will be installed there.
+Plugins are usually installed under `~/.tofulint.d/plugins`. Exceptionally, if you already have `./.tofulint.d/plugins` in your working directory, it will be installed there.
 
 The automatically installed plugins are placed as `[plugin dir]/[source]/[version]/tflint-ruleset-[name]`. (`tflint-ruleset-[name].exe` in Windows).
 
-If you want to change the plugin directory, you can change this with the [`plugin_dir`](config.md#plugin_dir) or `TFLINT_PLUGIN_DIR` environment variable.
+If you want to change the plugin directory, you can change this with the [`plugin_dir`](config.md#plugin_dir) or `TOFULINT_PLUGIN_DIR` environment variable.
 
 ## Avoiding rate limiting
 
-When you install plugins with `tflint --init`, TFLint calls the GitHub API to get release metadata. By default, this is an unauthenticated request, subject to a rate limit of 60 requests per hour _per IP address_.
+When you install plugins with `tofulint --init`, TofuLint calls the GitHub API to get release metadata. By default, this is an unauthenticated request, subject to a rate limit of 60 requests per hour _per IP address_.
 
 **Background:** [GitHub REST API: Rate Limiting](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting)
 
-If you fetch plugins frequently in CI, you may hit this rate limit. If you run TFLint in a shared CI environment such as GitHub Actions, you will share this quota with other tenants and may encounter rate limiting errors regardless of how often you run TFLint. 
+If you fetch plugins frequently in CI, you may hit this rate limit. If you run TofuLint in a shared CI environment such as GitHub Actions, you will share this quota with other tenants and may encounter rate limiting errors regardless of how often you run TofuLint. 
 
 To increase the rate limit, you can send an authenticated request by authenticating your requests with an access token, by setting the `GITHUB_TOKEN` environment variable. In GitHub Actions, you can pass the built-in `GITHUB_TOKEN` that is injected into each job.
 
-It's also a good idea to cache the plugin directory, as TFLint will only send requests if plugins aren't installed. The [setup-tflint action](https://github.com/terraform-linters/setup-tflint#usage) includes an example of caching in GitHub Actions.
+It's also a good idea to cache the plugin directory, as TofuLint will only send requests if plugins aren't installed. The [setup-tofulint action](https://github.com/tofuutils/setup-tofulint#usage) includes an example of caching in GitHub Actions.
 
 ## Keeping plugins up to date
 
-We recommend using automatic updates to keep your plugin version up-to-date. [Renovate supports TFLint plugins](https://docs.renovatebot.com/modules/manager/tflint-plugin/) to easily set up automated update workflows.
+We recommend using automatic updates to keep your plugin version up-to-date. [Renovate supports TofuLint plugins](https://docs.renovatebot.com/modules/manager/tflint-plugin/) to easily set up automated update workflows.
 
 ## Manual installation
 
@@ -88,7 +88,7 @@ plugin "foo" {
 }
 ```
 
-When the plugin is enabled, TFLint invokes the `tflint-ruleset-[name]` (`tflint-ruleset-[name].exe` on Windows) binary in the plugin directory (For instance, `~/.tflint.d/plugins/tflint-ruleset-[name]`). So you should move the binary into the directory in advance.
+When the plugin is enabled, TofuLint invokes the `tflint-ruleset-[name]` (`tflint-ruleset-[name].exe` on Windows) binary in the plugin directory (For instance, `~/.tofulint.d/plugins/tflint-ruleset-[name]`). So you should move the binary into the directory in advance.
 
 ## Bundled plugin
 

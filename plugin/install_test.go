@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_Install(t *testing.T) {
@@ -13,7 +13,7 @@ func Test_Install(t *testing.T) {
 	PluginRoot = t.TempDir()
 	defer func() { PluginRoot = original }()
 
-	config := NewInstallConfig(tflint.EmptyConfig(), &tflint.PluginConfig{
+	config := NewInstallConfig(tofulint.EmptyConfig(), &tofulint.PluginConfig{
 		Name:        "aws",
 		Enabled:     true,
 		Version:     "0.29.0",

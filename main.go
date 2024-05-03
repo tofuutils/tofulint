@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	colorable "github.com/mattn/go-colorable"
-	"github.com/terraform-linters/tflint/cmd"
+	"github.com/tofuutils/tofulint/cmd"
 )
 
 func main() {
@@ -29,8 +29,8 @@ func main() {
 				fmt.Fprintf(os.Stderr, " -> %d: %s: %s(%d)\n", depth, runtime.FuncForPC(pc).Name(), strings.Replace(src, path.Dir(src), "", 1), line)
 			}
 			fmt.Fprintln(os.Stderr, `
-TFLint crashed... :(
-Please attach an output log, describe the situation and version that occurred and post an issue to https://github.com/terraform-linters/tflint/issues`)
+TofuLint crashed... :(
+Please attach an output log, describe the situation and version that occurred and post an issue to https://github.com/tofuutils/tofulint/issues`)
 			os.Exit(cmd.ExitCodeError)
 		}
 	}()

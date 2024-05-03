@@ -37,7 +37,7 @@ func main() {
 	}
 
 	log.Println("rewriting files with new version...")
-	if err := rewriteFileWithNewVersion("tflint/meta.go", currentVersion, newVersion); err != nil {
+	if err := rewriteFileWithNewVersion("tofulint/meta.go", currentVersion, newVersion); err != nil {
 		log.Fatal(err)
 	}
 	if err := rewriteFileWithNewVersion(".github/ISSUE_TEMPLATE/bug.yml", currentVersion, newVersion); err != nil {
@@ -148,8 +148,8 @@ func checkGitStatus() error {
 	if err := execCommand(stdout, "git", "config", "--get", "remote.origin.url"); err != nil {
 		return err
 	}
-	if !strings.Contains(strings.TrimSpace(stdout.String()), "terraform-linters/tflint") {
-		return fmt.Errorf("remote.origin is not terraform-linters/tflint, got %s", strings.TrimSpace(stdout.String()))
+	if !strings.Contains(strings.TrimSpace(stdout.String()), "tofuutils/tofulint") {
+		return fmt.Errorf("remote.origin is not tofuutils/tofulint, got %s", strings.TrimSpace(stdout.String()))
 	}
 	return nil
 }
@@ -210,8 +210,8 @@ func generateReleaseNote(old string, new string, savedPath string) error {
 
 	note, _, err := client.Repositories.GenerateReleaseNotes(
 		context.Background(),
-		"terraform-linters",
-		"tflint",
+		"tofuutils",
+		"tofulint",
 		&github.GenerateNotesOptions{
 			TagName:         tagName,
 			PreviousTagName: &previousTagName,

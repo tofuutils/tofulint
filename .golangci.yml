@@ -1,13 +1,13 @@
 run:
   timeout: 5m
   skip-dirs:
-    - terraform/
+    - tofu/
 linters:
   enable:
     - gci
     - gofmt
 issues:
   exclude-rules:
-    - path: terraform/
+    - path: tofu/
       linters:
         - gosimple

@@ -13,7 +13,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint/plugin"
 	"github.com/terraform-linters/tflint/terraform"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -24,11 +24,11 @@ func (cli *CLI) inspect(opts Options) int {
 
 	workingDirs, err := findWorkingDirs(opts)
 	if err != nil {
-		cli.formatter.Print(tflint.Issues{}, fmt.Errorf("Failed to find workspaces; %w", err), map[string][]byte{})
+		cli.formatter.Print(tofulint.Issues{}, fmt.Errorf("Failed to find workspaces; %w", err), map[string][]byte{})
 		return ExitCodeError
 	}
 
-	issues := tflint.Issues{}
+	issues := tofulint.Issues{}
 	changes := map[string][]byte{}
 
 	for _, wd := range workingDirs {
@@ -71,7 +71,7 @@ func (cli *CLI) inspect(opts Options) int {
 			if cli.loader != nil {
 				sources = cli.loader.Sources()
 			}
-			cli.formatter.Print(tflint.Issues{}, err, sources)
+			cli.formatter.Print(tofulint.Issues{}, err, sources)
 			return ExitCodeError
 		}
 	}
@@ -93,7 +93,7 @@ func (cli *CLI) inspect(opts Options) int {
 
 	if opts.Fix {
 		if err := writeChanges(changes); err != nil {
-			cli.formatter.Print(tflint.Issues{}, err, cli.sources)
+			cli.formatter.Print(tofulint.Issues{}, err, cli.sources)
 			return ExitCodeError
 		}
 	}
@@ -105,8 +105,8 @@ func (cli *CLI) inspect(opts Options) int {
 	return ExitCodeOK
 }
 
-func (cli *CLI) inspectModule(opts Options, dir string, filterFiles []string) (tflint.Issues, map[string][]byte, error) {
-	issues := tflint.Issues{}
+func (cli *CLI) inspectModule(opts Options, dir string, filterFiles []string) (tofulint.Issues, map[string][]byte, error) {
+	issues := tofulint.Issues{}
 	changes := map[string][]byte{}
 	var err error
 
@@ -171,7 +171,7 @@ func (cli *CLI) inspectModule(opts Options, dir string, filterFiles []string) (t
 1. The autofix is making changes that do not fix the issue.
 2. The autofix is continuing to introduce new issues.
 
-By setting TFLINT_LOG=trace, you can confirm the changes made by the autofix and start troubleshooting.`)
+By setting TOFULINT_LOG=trace, you can confirm the changes made by the autofix and start troubleshooting.`)
 		}
 
 		for name, ruleset := range rulesetPlugin.RuleSets {
@@ -186,7 +186,7 @@ By setting TFLINT_LOG=trace, you can confirm the changes made by the autofix and
 				if opts.NoParallelRunners {
 					ch <- ruleset.Check(plugin.NewGRPCServer(runner, rootRunner, cli.loader.Files(), sdkVersions[name]))
 				} else {
-					go func(runner *tflint.Runner) {
+					go func(runner *tofulint.Runner) {
 						ch <- ruleset.Check(plugin.NewGRPCServer(runner, rootRunner, cli.loader.Files(), sdkVersions[name]))
 					}(runner)
 				}
@@ -208,7 +208,7 @@ By setting TFLINT_LOG=trace, you can confirm the changes made by the autofix and
 					issues = append(issues, issue)
 				}
 			}
-			runner.Issues = tflint.Issues{}
+			runner.Issues = tofulint.Issues{}
 
 			for path, source := range runner.LookupChanges(filterFiles...) {
 				changesInAttempt[path] = source
@@ -230,15 +230,15 @@ By setting TFLINT_LOG=trace, you can confirm the changes made by the autofix and
 	return issues, changes, nil
 }
 
-func (cli *CLI) setupRunners(opts Options, dir string) (*tflint.Runner, []*tflint.Runner, error) {
+func (cli *CLI) setupRunners(opts Options, dir string) (*tofulint.Runner, []*tofulint.Runner, error) {
 	configs, diags := cli.loader.LoadConfig(dir, cli.config.CallModuleType)
 	if diags.HasErrors() {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to load configurations; %w", diags)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to load configurations; %w", diags)
 	}
 
 	files, diags := cli.loader.LoadConfigDirFiles(dir)
 	if diags.HasErrors() {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to load configurations; %w", diags)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to load configurations; %w", diags)
 	}
 	annotations := map[string]tflint.Annotations{}
 	for path, file := range files {
@@ -250,33 +250,33 @@ func (cli *CLI) setupRunners(opts Options, dir string) (*tflint.Runner, []*tflin
 		annotations[path] = ants
 	}
 	if diags.HasErrors() {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to load configurations; %w", diags)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to load configurations; %w", diags)
 	}
 
 	variables, diags := cli.loader.LoadValuesFiles(dir, cli.config.Varfiles...)
 	if diags.HasErrors() {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to load values files; %w", diags)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to load values files; %w", diags)
 	}
 	cliVars, diags := terraform.ParseVariableValues(cli.config.Variables, configs.Module.Variables)
 	if diags.HasErrors() {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to parse variables; %w", diags)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to parse variables; %w", diags)
 	}
 	variables = append(variables, cliVars)
 
 	runner, err := tflint.NewRunner(cli.originalWorkingDir, cli.config, annotations, configs, variables...)
 	if err != nil {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to initialize a runner; %w", err)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to initialize a runner; %w", err)
 	}
 
 	moduleRunners, err := tflint.NewModuleRunners(runner)
 	if err != nil {
-		return nil, []*tflint.Runner{}, fmt.Errorf("Failed to prepare rule checking; %w", err)
+		return nil, []*tofulint.Runner{}, fmt.Errorf("Failed to prepare rule checking; %w", err)
 	}
 
 	return runner, moduleRunners, nil
 }
 
-func launchPlugins(config *tflint.Config, fix bool) (*plugin.Plugin, error) {
+func launchPlugins(config *tofulint.Config, fix bool) (*plugin.Plugin, error) {
 	// Lookup plugins
 	rulesetPlugin, err := plugin.Discovery(config)
 	if err != nil {
@@ -356,7 +356,7 @@ func writeChanges(changes map[string][]byte) error {
 }
 
 // Checks if the given issues contain severities above or equal to the given minimum failure opt. Defaults to true if an error occurs
-func exceedsMinimumFailure(issues tflint.Issues, minimumFailureOpt string) bool {
+func exceedsMinimumFailure(issues tofulint.Issues, minimumFailureOpt string) bool {
 	if minimumFailureOpt != "" {
 		minSeverity, err := tflint.NewSeverity(minimumFailureOpt)
 		if err != nil {

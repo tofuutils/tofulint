@@ -1,8 +1,8 @@
 # Architecture
 
-TFLint is a pluggable linter and does not contain any rule implementations. Rules are provided as plugins, these are launched by TFLint as subprocesses and communicate over gRPC.
+TofuLint is a pluggable linter and does not contain any rule implementations. Rules are provided as plugins, these are launched by TofuLint as subprocesses and communicate over gRPC.
 
-An important part of understanding TFLint's architecture is that TFLint (host) and a plugin act as both gRPC server/client.
+An important part of understanding TofuLint's architecture is that TofuLint (host) and a plugin act as both gRPC server/client.
 
 For example, the plugin (client) to the host (server) requests to:
 
@@ -23,7 +23,7 @@ The following diagram explains how an inspection is performed when a user execut
 
 ```mermaid
 flowchart TB
-  CLI["CLI<br/>(cmd package)"]-->configLoad["Load TFLint config<br/>(tflint.LoadConfig)"]
+  CLI["CLI<br/>(cmd package)"]-->configLoad["Load TofuLint config<br/>(tofulint.LoadConfig)"]
   configLoad-->tfLoad["Load Terraform config<br/>(terraform.LoadConfig)"]
   tfLoad-->discoverPlugin["Discover plugins<br/>(plugin.Discovery)"]
   discoverPlugin-->launchPlugin["Launch plugin processes<br/>(go-plugin)"]
@@ -49,27 +49,27 @@ flowchart TB
 
 ### CLI (`cmd` package)
 
-[The `cmd` package](https://github.com/terraform-linters/tflint/tree/master/cmd) is the entrypoint of the CLI. `cmd.CLI` has streams to stdout/stderr and prints a result to the screen.
+[The `cmd` package](https://github.com/tofuutils/tofulint/tree/master/cmd) is the entrypoint of the CLI. `cmd.CLI` has streams to stdout/stderr and prints a result to the screen.
 
 Depending on the user's instructions, it does the following:
 
 - Run inspection
-- Initialize TFLint (install plugins)
+- Initialize TofuLint (install plugins)
 - Start language server
 - Print version info
 - Run bundled plugin (internal use)
 
-This package is responsible for parsing CLI flags and arguments. The parsed `cmd.Option` is converted to `tflint.Config` and merged with a config file.
+This package is responsible for parsing CLI flags and arguments. The parsed `cmd.Option` is converted to `tofulint.Config` and merged with a config file.
 
-### Load TFLint config (`tflint.LoadConfig`)
+### Load TofuLint config (`tofulint.LoadConfig`)
 
-[The `tflint` package](https://github.com/terraform-linters/tflint/tree/master/tflint) provides many features related to TFLint, such as loading a config file (`.tflint.hcl`) and parsing annotations (`# tflint-ignore` comments).
+[The `tofulint` package](https://github.com/tofuutils/tofulint/tree/master/tofulint) provides many features related to TofuLint, such as loading a config file (`.tofulint.hcl`) and parsing annotations (`# tofulint-ignore` comments).
 
-The `tflint.LoadConfig` loads a config file and returns `tflint.Config`. This config will be used in later steps.
+The `tofulint.LoadConfig` loads a config file and returns `tofulint.Config`. This config will be used in later steps.
 
 ### Load Terraform config (`terraform.LoadConfig`)
 
-[The `terraform` package](https://github.com/terraform-linters/tflint/tree/master/terraform) is a fork of [github.com/hashicorp/terraform/internal](https://pkg.go.dev/github.com/hashicorp/terraform/internal). This package is responsible for processing the Terraform semantics, such as parsing `*.tf` files, evaluating expressions, and loading modules.
+[The `terraform` package](https://github.com/tofuutils/tofulint/tree/master/terraform) is a fork of [github.com/hashicorp/terraform/internal](https://pkg.go.dev/github.com/hashicorp/terraform/internal). This package is responsible for processing the Terraform semantics, such as parsing `*.tf` files, evaluating expressions, and loading modules.
 
 The `terraform.LoadConfig` reads `*.tf` files as a `terraform.Config` in the given directory. These structures are designed to be as similar to Terraform core. See "The Design of `terraform` Package" section below for details.
 

@@ -34,7 +34,7 @@ func TestLoadConfig(t *testing.T) {
 				"config.hcl": `
 config {
 	format = "compact"
-	plugin_dir = "~/.tflint.d/plugins"
+	plugin_dir = "~/.tofulint.d/plugins"
 
 	call_module_type = "all"
 	force = true
@@ -84,7 +84,7 @@ plugin "baz" {
 				Varfiles:          []string{"example1.tfvars", "example2.tfvars"},
 				Variables:         []string{"foo=bar", "bar=['foo']"},
 				DisabledByDefault: false,
-				PluginDir:         "~/.tflint.d/plugins",
+				PluginDir:         "~/.tofulint.d/plugins",
 				PluginDirSet:      true,
 				Format:            "compact",
 				FormatSet:         true,
@@ -133,7 +133,7 @@ plugin "baz" {
 			errCheck: neverHappend,
 		},
 		{
-			name: "TFLINT_CONFIG_FILE",
+			name: "TOFULINT_CONFIG_FILE",
 			file: "",
 			files: map[string]string{
 				"env.hcl": `
@@ -143,7 +143,7 @@ config {
 }`,
 			},
 			envs: map[string]string{
-				"TFLINT_CONFIG_FILE": "env.hcl",
+				"TOFULINT_CONFIG_FILE": "env.hcl",
 			},
 			want: &Config{
 				CallModuleType:       terraform.CallLocalModule,
@@ -168,7 +168,7 @@ config {
 			name: "default home config",
 			file: "",
 			files: map[string]string{
-				"/root/.tflint.hcl": `
+				"/root/.tofulint.hcl": `
 config {
 	force = true
 	disabled_by_default = true
@@ -233,10 +233,10 @@ plugin "terraform" {
 			},
 		},
 		{
-			name: "file not found with TFLINT_CONFIG_FILE",
+			name: "file not found with TOFULINT_CONFIG_FILE",
 			file: "",
 			envs: map[string]string{
-				"TFLINT_CONFIG_FILE": "not_found.hcl",
+				"TOFULINT_CONFIG_FILE": "not_found.hcl",
 			},
 			errCheck: func(err error) bool {
 				return err == nil || err.Error() != "failed to load file: open not_found.hcl: file does not exist"
@@ -376,7 +376,7 @@ plugin "foo" {
 			errCheck: neverHappend,
 		},
 		{
-			name: "prefer the passed file over TFLINT_CONFIG_FILE",
+			name: "prefer the passed file over TOFULINT_CONFIG_FILE",
 			file: "cli.hcl",
 			files: map[string]string{
 				"cli.hcl": `
@@ -391,7 +391,7 @@ config {
 }`,
 			},
 			envs: map[string]string{
-				"TFLINT_CONFIG_FILE": "env.hcl",
+				"TOFULINT_CONFIG_FILE": "env.hcl",
 			},
 			want: &Config{
 				CallModuleType:       terraform.CallLocalModule,
@@ -494,7 +494,7 @@ func TestMerge(t *testing.T) {
 		Varfiles:          []string{"example1.tfvars", "example2.tfvars"},
 		Variables:         []string{"foo=bar"},
 		DisabledByDefault: false,
-		PluginDir:         "./.tflint.d/plugins",
+		PluginDir:         "./.tofulint.d/plugins",
 		PluginDirSet:      true,
 		Format:            "compact",
 		FormatSet:         true,
@@ -552,7 +552,7 @@ func TestMerge(t *testing.T) {
 				Variables:            []string{"foo=bar"},
 				DisabledByDefault:    true,
 				DisabledByDefaultSet: true,
-				PluginDir:            "./.tflint.d/plugins",
+				PluginDir:            "./.tofulint.d/plugins",
 				PluginDirSet:         true,
 				Format:               "compact",
 				FormatSet:            true,
@@ -592,7 +592,7 @@ func TestMerge(t *testing.T) {
 				Variables:            []string{"bar=baz"},
 				DisabledByDefault:    false,
 				DisabledByDefaultSet: true,
-				PluginDir:            "~/.tflint.d/plugins",
+				PluginDir:            "~/.tofulint.d/plugins",
 				PluginDirSet:         true,
 				Format:               "json",
 				FormatSet:            true,
@@ -633,7 +633,7 @@ func TestMerge(t *testing.T) {
 				Variables:            []string{"foo=bar", "bar=baz"},
 				DisabledByDefault:    false,
 				DisabledByDefaultSet: true,
-				PluginDir:            "~/.tflint.d/plugins",
+				PluginDir:            "~/.tofulint.d/plugins",
 				PluginDirSet:         true,
 				Format:               "json",
 				FormatSet:            true,

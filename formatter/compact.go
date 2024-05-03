@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	hcl "github.com/hashicorp/hcl/v2"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
-func (f *Formatter) compactPrint(issues tflint.Issues, appErr error, sources map[string][]byte) {
+func (f *Formatter) compactPrint(issues tofulint.Issues, appErr error, sources map[string][]byte) {
 	if len(issues) > 0 {
 		fmt.Fprintf(f.Stdout, "%d issue(s) found:\n\n", len(issues))
 	}

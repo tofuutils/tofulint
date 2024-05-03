@@ -16,7 +16,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/plugin"
 	"github.com/terraform-linters/tflint-plugin-sdk/terraform/lang/marks"
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 	"github.com/zclconf/go-cty/cty"
 )
 
@@ -350,10 +350,10 @@ rule "test_in_file" {
 	foo = "bar"
 }`)
 	fs := afero.Afero{Fs: afero.NewMemMapFs()}
-	if err := fs.WriteFile(".tflint.hcl", config, os.ModePerm); err != nil {
+	if err := fs.WriteFile(".tofulint.hcl", config, os.ModePerm); err != nil {
 		t.Fatal(err)
 	}
-	fileConfig, err := tflint.LoadConfig(fs, ".tflint.hcl")
+	fileConfig, err := tflint.LoadConfig(fs, ".tofulint.hcl")
 	if err != nil {
 		t.Fatalf("failed to load test config: %s", err)
 	}
@@ -432,8 +432,8 @@ rule "test_in_file" {
 				t.Fatalf("failed to call GetRuleConfigContent: %s", err)
 			}
 
-			if string(sources[".tflint.hcl"]) != string(config) {
-				t.Fatalf("failed to match returned file: %s", sources[".tflint.hcl"])
+			if string(sources[".tofulint.hcl"]) != string(config) {
+				t.Fatalf("failed to match returned file: %s", sources[".tofulint.hcl"])
 			}
 
 			opts := cmp.Options{

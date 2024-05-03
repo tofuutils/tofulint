@@ -9,20 +9,20 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	hcl "github.com/hashicorp/hcl/v2"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 	"github.com/xeipuuv/gojsonschema"
 )
 
 func Test_sarifPrint(t *testing.T) {
 	cases := []struct {
 		Name   string
-		Issues tflint.Issues
+		Issues tofulint.Issues
 		Error  error
 		Stdout string
 	}{
 		{
 			Name:   "no issues",
-			Issues: tflint.Issues{},
+			Issues: tofulint.Issues{},
 			Stdout: fmt.Sprintf(`{
   "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0-rtm.5.json",
@@ -30,9 +30,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
@@ -40,19 +40,19 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 		{
 			Name: "issues",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -70,9 +70,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint",
+          "informationUri": "https://github.com/tofuutils/tofulint",
           "rules": [
             {
               "id": "test_rule",
@@ -112,19 +112,19 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 		{
 			Name: "issues not on line 1",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -142,9 +142,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint",
+          "informationUri": "https://github.com/tofuutils/tofulint",
           "rules": [
             {
               "id": "test_rule",
@@ -184,19 +184,19 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 		{
 			Name: "issues spanning multiple lines",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -214,9 +214,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint",
+          "informationUri": "https://github.com/tofuutils/tofulint",
           "rules": [
             {
               "id": "test_rule",
@@ -256,19 +256,19 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 		{
 			Name: "issues in directories",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -286,9 +286,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint",
+          "informationUri": "https://github.com/tofuutils/tofulint",
           "rules": [
             {
               "id": "test_rule",
@@ -328,19 +328,19 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 		{
 			Name: "Issues with missing source positions",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -357,9 +357,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint",
+          "informationUri": "https://github.com/tofuutils/tofulint",
           "rules": [
             {
               "id": "test_rule",
@@ -393,9 +393,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": [
@@ -409,10 +409,10 @@ func Test_sarifPrint(t *testing.T) {
       ]
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 		{
-			Name: "HCL diagnostics are surfaced as tflint-errors",
+			Name: "HCL diagnostics are surfaced as tofulint-errors",
 			Error: fmt.Errorf(
 				"babel fish confused; %w",
 				hcl.Diagnostics{
@@ -435,9 +435,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint",
+          "name": "tofulint",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": []
@@ -445,9 +445,9 @@ func Test_sarifPrint(t *testing.T) {
     {
       "tool": {
         "driver": {
-          "name": "tflint-errors",
+          "name": "tofulint-errors",
           "version": "%s",
-          "informationUri": "https://github.com/terraform-linters/tflint"
+          "informationUri": "https://github.com/tofuutils/tofulint"
         }
       },
       "results": [
@@ -478,7 +478,7 @@ func Test_sarifPrint(t *testing.T) {
       ]
     }
   ]
-}`, tflint.Version, tflint.Version),
+}`, tofulint.Version, tofulint.Version),
 		},
 	}
 

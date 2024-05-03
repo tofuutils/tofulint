@@ -12,7 +12,7 @@ import (
 	"runtime"
 
 	"github.com/google/go-github/v53/github"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 	"golang.org/x/oauth2"
 )
 
@@ -23,13 +23,13 @@ const defaultSourceHost = "github.com"
 // and directory names for installation.
 // Note that need a global config to manage installation directory.
 type InstallConfig struct {
-	globalConfig *tflint.Config
+	globalConfig *tofulint.Config
 
-	*tflint.PluginConfig
+	*tofulint.PluginConfig
 }
 
 // NewInstallConfig returns a new InstallConfig from passed PluginConfig.
-func NewInstallConfig(config *tflint.Config, pluginCfg *tflint.PluginConfig) *InstallConfig {
+func NewInstallConfig(config *tofulint.Config, pluginCfg *tofulint.PluginConfig) *InstallConfig {
 	return &InstallConfig{globalConfig: config, PluginConfig: pluginCfg}
 }
 

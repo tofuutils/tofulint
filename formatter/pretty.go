@@ -11,7 +11,7 @@ import (
 	hcl "github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclparse"
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 var colorBold = color.New(color.Bold).SprintfFunc()
@@ -20,7 +20,7 @@ var colorError = color.New(color.FgRed).SprintFunc()
 var colorWarning = color.New(color.FgYellow).SprintFunc()
 var colorNotice = color.New(color.FgHiWhite).SprintFunc()
 
-func (f *Formatter) prettyPrint(issues tflint.Issues, err error, sources map[string][]byte) {
+func (f *Formatter) prettyPrint(issues tofulint.Issues, err error, sources map[string][]byte) {
 	if len(issues) > 0 {
 		fmt.Fprintf(f.Stdout, "%d issue(s) found:\n\n", len(issues))
 
@@ -34,7 +34,7 @@ func (f *Formatter) prettyPrint(issues tflint.Issues, err error, sources map[str
 	}
 }
 
-func (f *Formatter) prettyPrintIssueWithSource(issue *tflint.Issue, sources map[string][]byte) {
+func (f *Formatter) prettyPrintIssueWithSource(issue *tofulint.Issue, sources map[string][]byte) {
 	message := issue.Message
 	if issue.Fixable {
 		if f.Fix {
@@ -136,7 +136,7 @@ func parseSources(sources map[string][]byte) map[string]*hcl.File {
 	return ret
 }
 
-func colorSeverity(severity tflint.Severity) string {
+func colorSeverity(severity tofulint.Severity) string {
 	switch severity {
 	case sdk.ERROR:
 		return colorError(severity)

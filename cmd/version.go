@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/terraform-linters/tflint/plugin"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func (cli *CLI) printVersion(opts Options) int {
@@ -14,7 +14,7 @@ func (cli *CLI) printVersion(opts Options) int {
 
 	workingDirs, err := findWorkingDirs(opts)
 	if err != nil {
-		cli.formatter.Print(tflint.Issues{}, fmt.Errorf("Failed to find workspaces; %w", err), map[string][]byte{})
+		cli.formatter.Print(tofulint.Issues{}, fmt.Errorf("Failed to find workspaces; %w", err), map[string][]byte{})
 		return ExitCodeError
 	}
 
@@ -40,7 +40,7 @@ func (cli *CLI) printVersion(opts Options) int {
 			return nil
 		})
 		if err != nil {
-			cli.formatter.Print(tflint.Issues{}, err, map[string][]byte{})
+			cli.formatter.Print(tofulint.Issues{}, err, map[string][]byte{})
 		}
 	}
 

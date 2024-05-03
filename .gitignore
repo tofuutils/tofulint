@@ -1,5 +1,5 @@
 *.test
 /vendor
 /dist
-tflint-ruleset-*
-!tflint-ruleset-*/
+tofulint-ruleset-*
+!tofulint-ruleset-*/

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/terraform-linters/tflint/terraform"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 // Options is an option specified by arguments.
@@ -14,7 +14,7 @@ type Options struct {
 	Init                   bool     `long:"init" description:"Install plugins"`
 	Langserver             bool     `long:"langserver" description:"Start language server"`
 	Format                 string   `short:"f" long:"format" description:"Output format" choice:"default" choice:"json" choice:"checkstyle" choice:"junit" choice:"compact" choice:"sarif"`
-	Config                 string   `short:"c" long:"config" description:"Config file name (default: .tflint.hcl)" value-name:"FILE"`
+	Config                 string   `short:"c" long:"config" description:"Config file name (default: .tofulint.hcl)" value-name:"FILE"`
 	IgnoreModules          []string `long:"ignore-module" description:"Ignore module sources" value-name:"SOURCE"`
 	EnableRules            []string `long:"enable-rule" description:"Enable rules from the command line" value-name:"RULE_NAME"`
 	DisableRules           []string `long:"disable-rule" description:"Disable rules from the command line" value-name:"RULE_NAME"`
@@ -37,7 +37,7 @@ type Options struct {
 	ActAsBundledPlugin     bool     `long:"act-as-bundled-plugin" hidden:"true"`
 }
 
-func (opts *Options) toConfig() *tflint.Config {
+func (opts *Options) toConfig() *tofulint.Config {
 	ignoreModules := map[string]bool{}
 	for _, module := range opts.IgnoreModules {
 		// For the backward compatibility, allow specifying like "source1,source2" style
@@ -97,7 +97,7 @@ func (opts *Options) toConfig() *tflint.Config {
 		log.Printf("[DEBUG]     %s: %t", name, ignore)
 	}
 
-	rules := map[string]*tflint.RuleConfig{}
+	rules := map[string]*tofulint.RuleConfig{}
 	for _, rule := range append(opts.Only, opts.EnableRules...) {
 		rules[rule] = &tflint.RuleConfig{
 			Name:    rule,
@@ -117,7 +117,7 @@ func (opts *Options) toConfig() *tflint.Config {
 		log.Printf("[WARN] Usage of --only will ignore other rules provided by --enable-rule or --disable-rule")
 	}
 
-	plugins := map[string]*tflint.PluginConfig{}
+	plugins := map[string]*tofulint.PluginConfig{}
 	for _, plugin := range opts.EnablePlugins {
 		plugins[plugin] = &tflint.PluginConfig{
 			Name:    plugin,

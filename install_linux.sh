@@ -41,45 +41,45 @@ get_latest_release() {
   if [ -n "${GITHUB_TOKEN}" ]; then
       headers=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
   fi
-  curl --fail -sS "${headers[@]}" "https://api.github.com/repos/terraform-linters/tflint/releases/latest" | # Get latest release from GitHub api
+  curl --fail -sS "${headers[@]}" "https://api.github.com/repos/terraform-linters/tofulint/releases/latest" | # Get latest release from GitHub api
     grep '"tag_name":' |                                                                                    # Get tag line
     sed -E 's/.*"([^"]+)".*/\1/'                                                                            # Pluck JSON value
 }
 
-download_path=$(mktemp -d -t tflint.XXXXXXXXXX)
-download_zip="${download_path}/tflint.zip"
-download_executable="${download_path}/tflint"
+download_path=$(mktemp -d -t tofulint.XXXXXXXXXX)
+download_zip="${download_path}/tofulint.zip"
+download_executable="${download_path}/tofulint"
 
-if [ -z "${TFLINT_VERSION}" ] || [ "${TFLINT_VERSION}" == "latest" ]; then
+if [ -z "${tofulint_VERSION}" ] || [ "${tofulint_VERSION}" == "latest" ]; then
   echo "Looking up the latest version ..."
   if [ -n "${GITHUB_TOKEN}" ]; then
     echo "Requesting with GITHUB_TOKEN ..."
   fi
   version=$(get_latest_release)
 else
-  version=${TFLINT_VERSION}
+  version=${tofulint_VERSION}
 fi
 
-echo "Downloading TFLint $version"
-curl --fail -sS -L -o "${download_zip}" "https://github.com/terraform-linters/tflint/releases/download/${version}/tflint_${os}.zip"
+echo "Downloading tofulint $version"
+curl --fail -sS -L -o "${download_zip}" "https://github.com/terraform-linters/tofulint/releases/download/${version}/tofulint_${os}.zip"
 echo "Downloaded successfully"
 
 echo -e "\n\n===================================================="
 echo "Unpacking ${download_zip} ..."
 unzip -o "${download_zip}" -d "${download_path}"
 if [[ $os == "windows"* ]]; then
-  dest="${TFLINT_INSTALL_PATH:-/bin}/"
+  dest="${tofulint_INSTALL_PATH:-/bin}/"
   echo "Installing ${download_executable} to ${dest} ..."
   mv "${download_executable}" "$dest"
   retVal=$?
   if [ $retVal -ne 0 ]; then
-    echo "Failed to install tflint"
+    echo "Failed to install tofulint"
     exit $retVal
   else
-    echo "tflint installed at ${dest} successfully"
+    echo "tofulint installed at ${dest} successfully"
   fi
 else
-  dest="${TFLINT_INSTALL_PATH:-/usr/local/bin}/"
+  dest="${tofulint_INSTALL_PATH:-/usr/local/bin}/"
   echo "Installing ${download_executable} to ${dest} ..."
 
   if [[ -w "$dest" ]]; then SUDO=""; else
@@ -91,7 +91,7 @@ else
   $SUDO install -c -v "${download_executable}" "$dest"
   retVal=$?
   if [ $retVal -ne 0 ]; then
-    echo "Failed to install tflint"
+    echo "Failed to install tofulint"
     exit $retVal
   fi
 fi
@@ -100,5 +100,5 @@ echo "Cleaning temporary downloaded files directory ${download_path} ..."
 rm -rf "${download_path}"
 
 echo -e "\n\n===================================================="
-echo "Current tflint version"
-"${dest}/tflint" -v
+echo "Current tofulint version"
+"${dest}/tofulint" -v

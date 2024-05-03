@@ -7,15 +7,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/terraform-linters/tflint/cmd"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/cmd"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func TestIntegration(t *testing.T) {
 	// Disable the bundled plugin because the `os.Executable()` is go(1) in the tests
-	tflint.DisableBundledPlugin = true
+	tofulint.DisableBundledPlugin = true
 	defer func() {
-		tflint.DisableBundledPlugin = false
+		tofulint.DisableBundledPlugin = false
 	}()
 
 	current, _ := os.Getwd()
@@ -27,8 +27,8 @@ func TestIntegration(t *testing.T) {
 		}
 	}()
 	pluginDir := t.TempDir()
-	os.Setenv("TFLINT_PLUGIN_DIR", pluginDir)
-	defer os.Setenv("TFLINT_PLUGIN_DIR", "")
+	os.Setenv("TOFULINT_PLUGIN_DIR", pluginDir)
+	defer os.Setenv("TOFULINT_PLUGIN_DIR", "")
 
 	// Init on the current directory
 	if err := os.Chdir(dir); err != nil {
@@ -40,12 +40,12 @@ func TestIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cli.Run([]string{"./tflint"})
-	if !strings.Contains(errStream.String(), `Plugin "aws" not found. Did you run "tflint --init"?`) {
+	cli.Run([]string{"./tofulint"})
+	if !strings.Contains(errStream.String(), `Plugin "aws" not found. Did you run "tofulint --init"?`) {
 		t.Fatalf("Expected to contain an initialization error, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
 
-	cli.Run([]string{"./tflint", "--init"})
+	cli.Run([]string{"./tofulint", "--init"})
 	if !strings.Contains(outStream.String(), `Installing "aws" plugin...`) {
 		t.Fatalf("Expected to contain an installation log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
@@ -53,12 +53,12 @@ func TestIntegration(t *testing.T) {
 		t.Fatalf("Expected to contain an installed log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
 
-	cli.Run([]string{"./tflint", "--init"})
+	cli.Run([]string{"./tofulint", "--init"})
 	if !strings.Contains(outStream.String(), `Plugin "aws" is already installed`) {
 		t.Fatalf("Expected to contain an already installed log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
 
-	cli.Run([]string{"./tflint", "--version"})
+	cli.Run([]string{"./tofulint", "--version"})
 	if !strings.Contains(outStream.String(), "+ ruleset.aws (0.21.1)") {
 		t.Fatalf("Expected to contain an plugin version log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
@@ -73,12 +73,12 @@ func TestIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cli.Run([]string{"./tflint", "--chdir", "basic", "--init"})
+	cli.Run([]string{"./tofulint", "--chdir", "basic", "--init"})
 	if !strings.Contains(outStream.String(), `Plugin "aws" is already installed`) {
 		t.Fatalf("Expected to contain an already installed log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
 
-	cli.Run([]string{"./tflint", "--chdir", "basic", "--version"})
+	cli.Run([]string{"./tofulint", "--chdir", "basic", "--version"})
 	if !strings.Contains(outStream.String(), "+ ruleset.aws (0.21.1)") {
 		t.Fatalf("Expected to contain an plugin version log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
@@ -93,7 +93,7 @@ func TestIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cli.Run([]string{"./tflint", "--recursive", "--init"})
+	cli.Run([]string{"./tofulint", "--recursive", "--init"})
 	if !strings.Contains(outStream.String(), "working directory: .") {
 		t.Fatalf("Expected to contain working dir log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}
@@ -112,7 +112,7 @@ func TestIntegration(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	cli.Run([]string{"./tflint", "--recursive", "--version"})
+	cli.Run([]string{"./tofulint", "--recursive", "--version"})
 	if !strings.Contains(outStream.String(), "working directory: basic") {
 		t.Fatalf("Expected to contain working dir log, but did not: stdout=%s, stderr=%s", outStream, errStream)
 	}

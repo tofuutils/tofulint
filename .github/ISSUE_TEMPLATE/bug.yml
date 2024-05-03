@@ -1,12 +1,12 @@
 name: Bug Report
-description: Report an bug/issue in TFLint's CLI
+description: Report an bug/issue in TofuLint's CLI
 labels: 
   - bug
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting a bug in TFLint. Please be sure to complete the fields below as we can only investigate reproducible issues. If you're having an issue with a specific rule/ruleset, report that in the relevant [ruleset repository](https://github.com/terraform-linters?q=topic%3Atflint-ruleset&type=source&language=&sort=). 
+        Thanks for reporting a bug in TofuLint. Please be sure to complete the fields below as we can only investigate reproducible issues. If you're having an issue with a specific rule/ruleset, report that in the relevant [ruleset repository](https://github.com/terraform-linters?q=topic%3Atflint-ruleset&type=source&language=&sort=).
   - type: textarea
     attributes:
       label: Summary
@@ -16,43 +16,43 @@ body:
   - type: input
     attributes:
       label: Command
-      description: The command used to invoke TFLint, including all arguments
-      value: tflint
+      description: The command used to invoke TofuLint, including all arguments
+      value: tofulint
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Terraform Configuration
+      label: OpenTofu Configuration
       description: >
-        The Terraform configuration (typically HCL) that reproduces the bug.
+        The OpenTofu configuration (typically HCL) that reproduces the bug.
         You may need to reduce your project to an isolated configuration.
-      render: terraform
+      render: tofu
     validations:
       required: true
   - type: textarea
     attributes:
-      label: TFLint Configuration
-      description: The TFLint configuration (typically `.tflint.hcl`).
+      label: TofuLint Configuration
+      description: The TofuLint configuration (typically `.tofulint.hcl`).
       render: HCL
     validations:
       required: true
   - type: textarea
     attributes:
       label: Output
-      description: The output printed by TFLint. If a clear error is not printed, enable debug logs (`TFLINT_LOG=debug`).
+      description: The output printed by TofuLint. If a clear error is not printed, enable debug logs (`TOFULINT_LOG=debug`).
       render: Shell
     validations:
       required: true
   - type: input
     attributes:
-      label: TFLint Version
+      label: TofuLint Version
       placeholder: '0.50.3'
     validations:
       required: true
   - type: input
     attributes:
-      label: Terraform Version
-      description: If TFLint is unable to parse your configuration but Terraform can, please include the Terraform version. Otherwise, this can be omitted.
+      label: OpenTofu Version
+      description: If TofuLint is unable to parse your configuration but OpenTofu can, please include the Terraform version. Otherwise, this can be omitted.
     validations:
       required: false
   - type: checkboxes

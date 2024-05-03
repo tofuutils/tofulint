@@ -1,6 +1,6 @@
-# Releasing a new version of TFLint
+# Releasing a new version of TofuLint
 
-Maintainers with push access to TFLint can publish new releases.
+Maintainers with push access to TofuLint can publish new releases.
 Keep the following in mind when publishing a release:
 
 - Avoid changing behavior in patch versions as much as possible. Patch version updates should only contain bug fixes.

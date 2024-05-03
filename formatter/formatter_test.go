@@ -2,7 +2,7 @@ package formatter
 
 import (
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 type testRule struct{}
@@ -15,7 +15,7 @@ func (r *testRule) Enabled() bool {
 	return true
 }
 
-func (r *testRule) Severity() tflint.Severity {
+func (r *testRule) Severity() tofulint.Severity {
 	return sdk.ERROR
 }
 

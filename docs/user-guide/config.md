@@ -1,18 +1,18 @@
-# Configuring TFLint
+# Configuring TofuLint
 
-You can change the behavior not only in CLI flags but also in config files. TFLint loads config files according to the following priority order:
+You can change the behavior not only in CLI flags but also in config files. TofuLint loads config files according to the following priority order:
 
 1. File passed by the `--config` option
-2. File set by the `TFLINT_CONFIG_FILE` environment variable
-3. Current directory (`./.tflint.hcl`)
-4. Home directory (`~/.tflint.hcl`)
+2. File set by the `TOFULINT_CONFIG_FILE` environment variable
+3. Current directory (`./.tofulint.hcl`)
+4. Home directory (`~/.tofulint.hcl`)
 
 The config file is written in [HCL](https://github.com/hashicorp/hcl). An example is shown below:
 
 ```hcl
 config {
   format = "compact"
-  plugin_dir = "~/.tflint.d/plugins"
+  plugin_dir = "~/.tofulint.d/plugins"
 
   call_module_type = "local"
   force = false
@@ -41,7 +41,7 @@ rule "aws_instance_invalid_type" {
 The file path is resolved relative to the module directory when `--chdir` or `--recursive` is used. To use a config file from the working directory when recursing, pass an absolute path:
 
 ```sh
-tflint --recursive --config "$(pwd)/.tflint.hcl"
+tofulint --recursive --config "$(pwd)/.tofulint.hcl"
 ```
 
 ### `format`
@@ -61,7 +61,7 @@ In recursive mode (`--recursive`), this field will be ignored in configuration f
 
 ### `plugin_dir`
 
-Set the plugin directory. The default is `~/.tflint.d/plugins` (or `./.tflint.d/plugins`). See also [Configuring Plugins](plugins.md#advanced-usage)
+Set the plugin directory. The default is `~/.tofulint.d/plugins` (or `./.tofulint.d/plugins`). See also [Configuring Plugins](plugins.md#advanced-usage)
 
 ### `call_module_type`
 
@@ -82,14 +82,14 @@ config {
 ```
 
 ```console
-$ tflint --call-module-type=all
+$ tofulint --call-module-type=all
 ```
 
 ### `force`
 
 CLI flag: `--force`
 
-Return zero exit status even if issues found. TFLint returns the following exit statuses on exit by default:
+Return zero exit status even if issues found. TofuLint returns the following exit statuses on exit by default:
 
 - 0: No issues found
 - 1: Errors occurred
@@ -119,7 +119,7 @@ rule "aws_instance_previous_type" {
 ```
 
 ```console
-$ tflint --only aws_instance_invalid_type --only aws_instance_previous_type
+$ tofulint --only aws_instance_invalid_type --only aws_instance_previous_type
 ```
 
 ### `ignore_module`
@@ -139,14 +139,14 @@ config {
 ```
 
 ```console
-$ tflint --ignore-module terraform-aws-modules/vpc/aws --ignore-module terraform-aws-modules/security-group/aws
+$ tofulint --ignore-module terraform-aws-modules/vpc/aws --ignore-module terraform-aws-modules/security-group/aws
 ```
 
 ### `varfile`
 
 CLI flag: `--var-file`
 
-Set Terraform variables from `tfvars` files. If `terraform.tfvars` or any `*.auto.tfvars` files are present, they will be automatically loaded.
+Set OpenTofu variables from `tfvars` files. If `terraform.tfvars` or any `*.auto.tfvars` files are present, they will be automatically loaded.
 
 ```hcl
 config {
@@ -155,7 +155,7 @@ config {
 ```
 
 ```console
-$ tflint --var-file example1.tfvars --var-file example2.tfvars
+$ tofulint --var-file example1.tfvars --var-file example2.tfvars
 ```
 
 ### `variables`
@@ -171,14 +171,14 @@ config {
 ```
 
 ```console
-$ tflint --var "foo=bar" --var "bar=[\"baz\"]"
+$ tofulint --var "foo=bar" --var "bar=[\"baz\"]"
 ```
 
 ### `rule` blocks
 
 CLI flag: `--enable-rule`, `--disable-rule`
 
-You can configure TFLint rules using `rule` blocks. Each rule's implementation specifies whether it will be enabled by default. In some rulesets, the majority of rules are disabled by default. Use `rule` blocks to enable them:
+You can configure TofuLint rules using `rule` blocks. Each rule's implementation specifies whether it will be enabled by default. In some rulesets, the majority of rules are disabled by default. Use `rule` blocks to enable them:
 
 ```hcl
 rule "terraform_unused_declarations" {

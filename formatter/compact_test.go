@@ -7,25 +7,25 @@ import (
 
 	hcl "github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclparse"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_compactPrint(t *testing.T) {
 	cases := []struct {
 		Name   string
-		Issues tflint.Issues
+		Issues tofulint.Issues
 		Error  error
 		Stdout string
 		Stderr string
 	}{
 		{
 			Name:   "no issues",
-			Issues: tflint.Issues{},
+			Issues: tofulint.Issues{},
 			Stdout: "",
 		},
 		{
 			Name: "issues",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",

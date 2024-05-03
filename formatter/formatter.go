@@ -6,7 +6,7 @@ import (
 
 	hcl "github.com/hashicorp/hcl/v2"
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 // Formatter outputs appropriate results to stdout and stderr depending on the format
@@ -19,7 +19,7 @@ type Formatter struct {
 }
 
 // Print outputs the given issues and errors according to configured format
-func (f *Formatter) Print(issues tflint.Issues, err error, sources map[string][]byte) {
+func (f *Formatter) Print(issues tofulint.Issues, err error, sources map[string][]byte) {
 	switch f.Format {
 	case "default":
 		f.prettyPrint(issues, err, sources)
@@ -38,7 +38,7 @@ func (f *Formatter) Print(issues tflint.Issues, err error, sources map[string][]
 	}
 }
 
-func toSeverity(lintType tflint.Severity) string {
+func toSeverity(lintType tofulint.Severity) string {
 	switch lintType {
 	case sdk.ERROR:
 		return "error"

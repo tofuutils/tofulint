@@ -8,23 +8,23 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/terraform-linters/tflint/terraform"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_toConfig(t *testing.T) {
 	cases := []struct {
 		Name     string
 		Command  string
-		Expected *tflint.Config
+		Expected *tofulint.Config
 	}{
 		{
 			Name:     "default",
-			Command:  "./tflint",
+			Command:  "./tofulint",
 			Expected: tflint.EmptyConfig(),
 		},
 		{
 			Name:    "--call-module-type",
-			Command: "./tflint --call-module-type all",
+			Command: "./tofulint --call-module-type all",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallAllModule,
 				CallModuleTypeSet: true,
@@ -33,13 +33,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--module",
-			Command: "./tflint --module",
+			Command: "./tofulint --module",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallAllModule,
 				CallModuleTypeSet: true,
@@ -48,13 +48,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--no-module",
-			Command: "./tflint --no-module",
+			Command: "./tofulint --no-module",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallNoModule,
 				CallModuleTypeSet: true,
@@ -63,13 +63,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--module and --call-module-type",
-			Command: "./tflint --module --call-module-type none",
+			Command: "./tofulint --module --call-module-type none",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallNoModule,
 				CallModuleTypeSet: true,
@@ -78,13 +78,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--force",
-			Command: "./tflint --force",
+			Command: "./tofulint --force",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             true,
@@ -93,13 +93,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--ignore-module",
-			Command: "./tflint --ignore-module module1,module2",
+			Command: "./tofulint --ignore-module module1,module2",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -107,13 +107,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "multiple --ignore-module",
-			Command: "./tflint --ignore-module module1 --ignore-module module2",
+			Command: "./tofulint --ignore-module module1 --ignore-module module2",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -121,13 +121,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--var-file",
-			Command: "./tflint --var-file example1.tfvars,example2.tfvars",
+			Command: "./tofulint --var-file example1.tfvars,example2.tfvars",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -135,13 +135,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{"example1.tfvars", "example2.tfvars"},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "multiple --var-file",
-			Command: "./tflint --var-file example1.tfvars --var-file example2.tfvars",
+			Command: "./tofulint --var-file example1.tfvars --var-file example2.tfvars",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -149,13 +149,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{"example1.tfvars", "example2.tfvars"},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--var",
-			Command: "./tflint --var foo=bar --var bar=baz",
+			Command: "./tofulint --var foo=bar --var bar=baz",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -163,13 +163,13 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{"foo=bar", "bar=baz"},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--enable-rule",
-			Command: "./tflint --enable-rule aws_instance_invalid_type --enable-rule aws_instance_previous_type",
+			Command: "./tofulint --enable-rule aws_instance_invalid_type --enable-rule aws_instance_previous_type",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -177,7 +177,7 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules: map[string]*tflint.RuleConfig{
+				Rules: map[string]*tofulint.RuleConfig{
 					"aws_instance_invalid_type": {
 						Name:    "aws_instance_invalid_type",
 						Enabled: true,
@@ -189,12 +189,12 @@ func Test_toConfig(t *testing.T) {
 						Body:    nil,
 					},
 				},
-				Plugins: map[string]*tflint.PluginConfig{},
+				Plugins: map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--disable-rule",
-			Command: "./tflint --disable-rule aws_instance_invalid_type --disable-rule aws_instance_previous_type",
+			Command: "./tofulint --disable-rule aws_instance_invalid_type --disable-rule aws_instance_previous_type",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -202,7 +202,7 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules: map[string]*tflint.RuleConfig{
+				Rules: map[string]*tofulint.RuleConfig{
 					"aws_instance_invalid_type": {
 						Name:    "aws_instance_invalid_type",
 						Enabled: false,
@@ -214,12 +214,12 @@ func Test_toConfig(t *testing.T) {
 						Body:    nil,
 					},
 				},
-				Plugins: map[string]*tflint.PluginConfig{},
+				Plugins: map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--only",
-			Command: "./tflint --only aws_instance_invalid_type",
+			Command: "./tofulint --only aws_instance_invalid_type",
 			Expected: &tflint.Config{
 				CallModuleType:       terraform.CallLocalModule,
 				Force:                false,
@@ -229,19 +229,19 @@ func Test_toConfig(t *testing.T) {
 				DisabledByDefault:    true,
 				DisabledByDefaultSet: true,
 				Only:                 []string{"aws_instance_invalid_type"},
-				Rules: map[string]*tflint.RuleConfig{
+				Rules: map[string]*tofulint.RuleConfig{
 					"aws_instance_invalid_type": {
 						Name:    "aws_instance_invalid_type",
 						Enabled: true,
 						Body:    nil,
 					},
 				},
-				Plugins: map[string]*tflint.PluginConfig{},
+				Plugins: map[string]*tofulint.PluginConfig{},
 			},
 		},
 		{
 			Name:    "--enable-plugin",
-			Command: "./tflint --enable-plugin test --enable-plugin another-test",
+			Command: "./tofulint --enable-plugin test --enable-plugin another-test",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -249,8 +249,8 @@ func Test_toConfig(t *testing.T) {
 				Varfiles:          []string{},
 				Variables:         []string{},
 				DisabledByDefault: false,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins: map[string]*tflint.PluginConfig{
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins: map[string]*tofulint.PluginConfig{
 					"test": {
 						Name:    "test",
 						Enabled: true,
@@ -266,7 +266,7 @@ func Test_toConfig(t *testing.T) {
 		},
 		{
 			Name:    "--format",
-			Command: "./tflint --format compact",
+			Command: "./tofulint --format compact",
 			Expected: &tflint.Config{
 				CallModuleType:    terraform.CallLocalModule,
 				Force:             false,
@@ -276,8 +276,8 @@ func Test_toConfig(t *testing.T) {
 				DisabledByDefault: false,
 				Format:            "compact",
 				FormatSet:         true,
-				Rules:             map[string]*tflint.RuleConfig{},
-				Plugins:           map[string]*tflint.PluginConfig{},
+				Rules:             map[string]*tofulint.RuleConfig{},
+				Plugins:           map[string]*tofulint.PluginConfig{},
 			},
 		},
 	}

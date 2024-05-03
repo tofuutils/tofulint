@@ -1,14 +1,14 @@
 # Compatibility with Terraform
 
-TFLint interprets the [Terraform language](https://developer.hashicorp.com/terraform/language) with its own parser which is a fork of the Terraform's native one. This allows it to be parsed correctly even if Terraform is not installed at runtime.
+TofuLint interprets the [Terraform language](https://developer.hashicorp.com/terraform/language) with its own parser which is a fork of the Terraform's native one. This allows it to be parsed correctly even if Terraform is not installed at runtime.
 
-The parser supports Terraform v1.x syntax and semantics. The language compatibility on Terraform v1.x is defined by [Compatibility Promises](https://developer.hashicorp.com/terraform/language/v1-compatibility-promises). TFLint follows this promise. New features are only supported in newer TFLint versions, and bug and experimental features compatibility are not guaranteed.
+The parser supports Terraform v1.x syntax and semantics. The language compatibility on Terraform v1.x is defined by [Compatibility Promises](https://developer.hashicorp.com/terraform/language/v1-compatibility-promises). TofuLint follows this promise. New features are only supported in newer TofuLint versions, and bug and experimental features compatibility are not guaranteed.
 
 ## Input Variables
 
-Like Terraform, TFLint supports the `--var`,` --var-file` options, environment variables (`TF_VAR_*`), and automatically loading variable definitions (`terraform.tfvars` and `*.auto.tfvars`) files. See [Input Variables](https://developer.hashicorp.com/terraform/language/values/variables).
+Like OpenTofu, TofuLint supports the `--var`,` --var-file` options, environment variables (`TF_VAR_*`), and automatically loading variable definitions (`terraform.tfvars` and `*.auto.tfvars`) files. See [Input Variables](https://developer.hashicorp.com/terraform/language/values/variables).
 
-Input variables are evaluated just like in Terraform:
+Input variables are evaluated just like in OpenTofu:
 
 ```hcl
 variable "instance_type" {
@@ -45,7 +45,7 @@ resource "aws_instance" "foo" {
 
 ## Local Values
 
-TFLint supports [Local Values](https://developer.hashicorp.com/terraform/language/values/locals).
+TofuLint supports [Local Values](https://developer.hashicorp.com/terraform/language/values/locals).
 
 ```hcl
 variable "foo" {
@@ -67,7 +67,7 @@ local.resource # => ignored (unknown)
 
 ## The `count` and `for_each` Meta-Arguments
 
-TFLint supports the [`count`](https://developer.hashicorp.com/terraform/language/meta-arguments/count) and [`for_each`](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each) meta-arguments.
+TofuLint supports the [`count`](https://developer.hashicorp.com/terraform/language/meta-arguments/count) and [`for_each`](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each) meta-arguments.
 
 ```hcl
 resource "aws_instance" "foo" {
@@ -101,7 +101,7 @@ resource "aws_instance" "foo" {
 
 ## The `path.*` and `terraform.workspace` Values
 
-TFLint supports [filesystem and workspace info](https://developer.hashicorp.com/terraform/language/expressions/references#filesystem-and-workspace-info).
+TofuLint supports [filesystem and workspace info](https://developer.hashicorp.com/terraform/language/expressions/references#filesystem-and-workspace-info).
 
 - `path.module`
 - `path.root`
@@ -110,7 +110,7 @@ TFLint supports [filesystem and workspace info](https://developer.hashicorp.com/
 
 ## Unsupported Named Values
 
-The values below are state-dependent and cannot be determined statically, so TFLint resolves them to unknown values.
+The values below are state-dependent and cannot be determined statically, so TofuLint resolves them to unknown values.
 
 - `<RESOURCE TYPE>.<NAME>`
 - `module.<MODULE NAME>`
@@ -123,7 +123,7 @@ The values below are state-dependent and cannot be determined statically, so TFL
 
 ## Dynamic Blocks
 
-TFLint supports [dynamic blocks](https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks).
+TofuLint supports [dynamic blocks](https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks).
 
 ```hcl
 resource "aws_instance" "dynamic" {
@@ -143,7 +143,7 @@ Similar to support for meta-arguments, some rules may process a dynamic block as
 
 ## Modules
 
-TFLint doesn't automatically inspect the content of modules themselves. However, by default, it will analyze their content in order to raise any issues that arise from attributes in module calls.
+TofuLint doesn't automatically inspect the content of modules themselves. However, by default, it will analyze their content in order to raise any issues that arise from attributes in module calls.
 
 ```hcl
 resource "aws_instance" "static" {

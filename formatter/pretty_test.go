@@ -8,7 +8,7 @@ import (
 
 	"github.com/fatih/color"
 	hcl "github.com/hashicorp/hcl/v2"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_prettyPrint(t *testing.T) {
@@ -17,7 +17,7 @@ func Test_prettyPrint(t *testing.T) {
 
 	cases := []struct {
 		Name    string
-		Issues  tflint.Issues
+		Issues  tofulint.Issues
 		Fix     bool
 		Error   error
 		Sources map[string][]byte
@@ -26,12 +26,12 @@ func Test_prettyPrint(t *testing.T) {
 	}{
 		{
 			Name:   "no issues",
-			Issues: tflint.Issues{},
+			Issues: tofulint.Issues{},
 			Stdout: "",
 		},
 		{
 			Name: "issues",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -74,7 +74,7 @@ Reference: https://github.com
 		},
 		{
 			Name: "no sources",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -98,7 +98,7 @@ Reference: https://github.com
 		},
 		{
 			Name: "fixable",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -126,7 +126,7 @@ Reference: https://github.com
 		},
 		{
 			Name: "fixed",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -155,7 +155,7 @@ Reference: https://github.com
 		},
 		{
 			Name: "issue with source",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",
@@ -183,7 +183,7 @@ Reference: https://github.com
 		},
 		{
 			Name:   "error",
-			Issues: tflint.Issues{},
+			Issues: tofulint.Issues{},
 			Error:  fmt.Errorf("Failed to work; %w", errors.New("I don't feel like working")),
 			Stderr: "Failed to work; I don't feel like working\n",
 		},
