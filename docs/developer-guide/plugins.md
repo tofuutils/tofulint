@@ -4,7 +4,7 @@ If you want to add custom rules, you can write ruleset plugins.
 
 ## Overview
 
-Plugins are independent binaries and use [go-plugin](https://github.com/hashicorp/go-plugin) to communicate with TFLint over gRPC. TFLint executes the binary when the plugin is enabled, and the plugin process must act as an gRPC server for TFLint.
+Plugins are independent binaries and use [go-plugin](https://github.com/hashicorp/go-plugin) to communicate with TofuLint over gRPC. TofuLint executes the binary when the plugin is enabled, and the plugin process must act as an gRPC server for TofuLint.
 
 If you want to create a new plugin, [The template repository](https://github.com/terraform-linters/tflint-ruleset-template) is available to satisfy these specification. You can create your own repository from "Use this template" and easily add rules based on some reference rules.
 
@@ -27,10 +27,10 @@ plugin "template" {
 ```console
 $ make install
 go build
-mkdir -p ~/.tflint.d/plugins
-mv ./tflint-ruleset-template ~/.tflint.d/plugins
-$ tflint -v
-TFLint version 0.28.1
+mkdir -p ~/.tofulint.d/plugins
+mv ./tflint-ruleset-template ~/.tofulint.d/plugins
+$ tofulint -v
+TofuLint version 0.28.1
 + ruleset.template (0.1.0)
 ```
 
@@ -40,7 +40,7 @@ Rename the ruleset and add/edit rules. After making changes, you can check the b
 
 ## 4. Creating a GitHub Release
 
-You can build and install your own ruleset locally as described above, but you can also install it automatically with `tflint --init`.
+You can build and install your own ruleset locally as described above, but you can also install it automatically with `tofulint --init`.
 
 The requirements to support automatic installation are as follows:
 

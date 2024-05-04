@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-TFLint always supports only the latest version and does not provide security updates for older versions.
+TofuLint always supports only the latest version and does not provide security updates for older versions.
 
 ## Reporting a Vulnerability
 

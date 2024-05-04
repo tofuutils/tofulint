@@ -20,7 +20,7 @@ func Test_NewAnnotations(t *testing.T) {
 			name: "annotation starting with #",
 			src: `
 resource "aws_instance" "foo" {
-  # tflint-ignore: aws_instance_invalid_type
+  # tofulint-ignore: aws_instance_invalid_type
   instance_type = "t2.micro" # This is also comment
 }`,
 			want: Annotations{
@@ -28,7 +28,7 @@ resource "aws_instance" "foo" {
 					Content: "aws_instance_invalid_type",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("# tflint-ignore: aws_instance_invalid_type\n"),
+						Bytes: []byte("# tofulint-ignore: aws_instance_invalid_type\n"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 3, Column: 3},
@@ -43,14 +43,14 @@ resource "aws_instance" "foo" {
 			src: `
 resource "aws_instance" "foo" {
   // This is also comment
-  instance_type = "t2.micro" // tflint-ignore: aws_instance_invalid_type
+  instance_type = "t2.micro" // tofulint-ignore: aws_instance_invalid_type
 }`,
 			want: Annotations{
 				&LineAnnotation{
 					Content: "aws_instance_invalid_type",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("// tflint-ignore: aws_instance_invalid_type\n"),
+						Bytes: []byte("// tofulint-ignore: aws_instance_invalid_type\n"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 4, Column: 30},
@@ -64,7 +64,7 @@ resource "aws_instance" "foo" {
 			name: "annotation starting with /*",
 			src: `
 resource "aws_instance" "foo" {
-  /* tflint-ignore: aws_instance_invalid_type */
+  /* tofulint-ignore: aws_instance_invalid_type */
   instance_type = "t2.micro" /* This is also comment */
 }`,
 			want: Annotations{
@@ -72,7 +72,7 @@ resource "aws_instance" "foo" {
 					Content: "aws_instance_invalid_type",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("/* tflint-ignore: aws_instance_invalid_type */"),
+						Bytes: []byte("/* tofulint-ignore: aws_instance_invalid_type */"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 3, Column: 3},
@@ -86,7 +86,7 @@ resource "aws_instance" "foo" {
 			name: "ignoring multiple rules",
 			src: `
 resource "aws_instance" "foo" {
-  /* tflint-ignore: aws_instance_invalid_type, terraform_deprecated_syntax */
+  /* tofulint-ignore: aws_instance_invalid_type, terraform_deprecated_syntax */
   instance_type = "t2.micro"
 }`,
 			want: Annotations{
@@ -94,7 +94,7 @@ resource "aws_instance" "foo" {
 					Content: "aws_instance_invalid_type, terraform_deprecated_syntax",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("/* tflint-ignore: aws_instance_invalid_type, terraform_deprecated_syntax */"),
+						Bytes: []byte("/* tofulint-ignore: aws_instance_invalid_type, terraform_deprecated_syntax */"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 3, Column: 3},
@@ -108,14 +108,14 @@ resource "aws_instance" "foo" {
 			name: "with reason starting with //",
 			src: `
 resource "aws_instance" "foo" {
-  instance_type = "t2.micro" // tflint-ignore: aws_instance_invalid_type // With reason
+  instance_type = "t2.micro" // tofulint-ignore: aws_instance_invalid_type // With reason
 }`,
 			want: Annotations{
 				&LineAnnotation{
 					Content: "aws_instance_invalid_type",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("// tflint-ignore: aws_instance_invalid_type // With reason\n"),
+						Bytes: []byte("// tofulint-ignore: aws_instance_invalid_type // With reason\n"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 3, Column: 30},
@@ -129,7 +129,7 @@ resource "aws_instance" "foo" {
 			name: "with reason starting with #",
 			src: `
 resource "aws_instance" "foo" {
-  # tflint-ignore: aws_instance_invalid_type # With reason
+  # tofulint-ignore: aws_instance_invalid_type # With reason
   instance_type = "t2.micro"
 }`,
 			want: Annotations{
@@ -137,7 +137,7 @@ resource "aws_instance" "foo" {
 					Content: "aws_instance_invalid_type",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("# tflint-ignore: aws_instance_invalid_type # With reason\n"),
+						Bytes: []byte("# tofulint-ignore: aws_instance_invalid_type # With reason\n"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 3, Column: 3},
@@ -148,8 +148,8 @@ resource "aws_instance" "foo" {
 			},
 		},
 		{
-			name: "tflint-ignore-file annotation",
-			src: `# tflint-ignore-file: aws_instance_invalid_type
+			name: "tofulint-ignore-file annotation",
+			src: `# tofulint-ignore-file: aws_instance_invalid_type
 resource "aws_instance" "foo" {
   instance_type = "t2.micro"
 }`,
@@ -158,7 +158,7 @@ resource "aws_instance" "foo" {
 					Content: "aws_instance_invalid_type",
 					Token: hclsyntax.Token{
 						Type:  hclsyntax.TokenComment,
-						Bytes: []byte("# tflint-ignore-file: aws_instance_invalid_type\n"),
+						Bytes: []byte("# tofulint-ignore-file: aws_instance_invalid_type\n"),
 						Range: hcl.Range{
 							Filename: "resource.tf",
 							Start:    hcl.Pos{Line: 1, Column: 1},
@@ -169,22 +169,22 @@ resource "aws_instance" "foo" {
 			},
 		},
 		{
-			name: "tflint-ignore-file annotation outside the first line",
+			name: "tofulint-ignore-file annotation outside the first line",
 			src: `
 resource "aws_instance" "foo" {
-  # tflint-ignore-file: aws_instance_invalid_type
+  # tofulint-ignore-file: aws_instance_invalid_type
   instance_type = "t2.micro"
 }`,
 			want:  Annotations{},
-			diags: "resource.tf:3,3-4,1: tflint-ignore-file annotation must be written at the top of file; tflint-ignore-file annotation is written at line 3, column 3",
+			diags: "resource.tf:3,3-4,1: tofulint-ignore-file annotation must be written at the top of file; tofulint-ignore-file annotation is written at line 3, column 3",
 		},
 		{
-			name: "tflint-ignore-file annotation outside the first column",
-			src: `resource "aws_instance" "foo" { # tflint-ignore-file: aws_instance_invalid_type
+			name: "tofulint-ignore-file annotation outside the first column",
+			src: `resource "aws_instance" "foo" { # tofulint-ignore-file: aws_instance_invalid_type
   instance_type = "t2.micro"
 }`,
 			want:  Annotations{},
-			diags: "resource.tf:1,33-2,1: tflint-ignore-file annotation must be written at the top of file; tflint-ignore-file annotation is written at line 1, column 33",
+			diags: "resource.tf:1,33-2,1: tofulint-ignore-file annotation must be written at the top of file; tofulint-ignore-file annotation is written at line 1, column 33",
 		},
 	}
 

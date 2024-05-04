@@ -14,9 +14,9 @@ import (
 	"text/template"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/terraform-linters/tflint/cmd"
-	"github.com/terraform-linters/tflint/formatter"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofuenv/cmd"
+	"github.com/tofuutils/tofuenv/formatter"
+	"github.com/tofuutils/tofuenv/tofuutils"
 )
 
 func TestMain(m *testing.M) {
@@ -37,185 +37,185 @@ func TestIntegration(t *testing.T) {
 	}{
 		{
 			Name:    "basic",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "basic",
 		},
 		{
 			Name:    "override",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "override",
 		},
 		{
 			Name:    "variables",
-			Command: "./tflint --format json --var-file variables.tfvars --var var=var",
+			Command: "./tofulint --format json --var-file variables.tfvars --var var=var",
 			Dir:     "variables",
 		},
 		{
 			Name:    "module",
-			Command: "./tflint --format json --ignore-module ./ignore_module",
+			Command: "./tofulint --format json --ignore-module ./ignore_module",
 			Dir:     "module",
 		},
 		{
 			Name:    "without module init",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "without_module_init",
 		},
 		{
 			Name:    "with module init",
-			Command: "./tflint --format json --call-module-type all",
+			Command: "./tofulint --format json --call-module-type all",
 			Dir:     "with_module_init",
 		},
 		{
 			Name:    "no calling module",
-			Command: "./tflint --format json --call-module-type none",
+			Command: "./tofulint --format json --call-module-type none",
 			Dir:     "no_calling_module",
 		},
 		{
 			Name:    "plugin",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "plugin",
 		},
 		{
 			Name:    "jsonsyntax",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "jsonsyntax",
 		},
 		{
 			Name:    "path",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "path",
 		},
 		{
 			Name:    "init from cwd",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "init-cwd/root",
 		},
 		{
 			Name:    "enable rule which has required configuration by CLI options",
-			Command: "./tflint --format json --enable-rule aws_s3_bucket_with_config_example",
+			Command: "./tofulint --format json --enable-rule aws_s3_bucket_with_config_example",
 			Dir:     "enable-required-config-rule-by-cli",
 		},
 		{
 			Name:    "enable rule which does not have required configuration by CLI options",
-			Command: "./tflint --format json --enable-rule aws_db_instance_with_default_config_example",
+			Command: "./tofulint --format json --enable-rule aws_db_instance_with_default_config_example",
 			Dir:     "enable-config-rule-by-cli",
 		},
 		{
 			Name:    "heredoc",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "heredoc",
 		},
 		{
 			Name:    "config parse error with HCL metadata",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "bad-config",
 		},
 		{
 			Name:    "conditional resources",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "conditional",
 		},
 		{
 			Name:    "dynamic blocks",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "dynblock",
 		},
 		{
 			Name:    "unknown dynamic blocks",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "dynblock-unknown",
 		},
 		{
 			Name:    "provider config",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "provider-config",
 		},
 		{
 			Name:    "rule config",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "rule-config",
 		},
 		{
 			Name:    "disabled rules",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "disabled-rules",
 		},
 		{
 			Name:    "cty-based eval",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "cty-based-eval",
 		},
 		{
 			Name:    "map attribute eval",
-			Command: "./tflint --format json",
+			Command: "./tofulint --format json",
 			Dir:     "map-attribute",
 		},
 		{
 			Name:    "rule config with --enable-rule",
-			Command: "tflint --enable-rule aws_s3_bucket_with_config_example --format json",
+			Command: "tofulint --enable-rule aws_s3_bucket_with_config_example --format json",
 			Dir:     "rule-config",
 		},
 		{
 			Name:    "rule config with --only",
-			Command: "tflint --only aws_s3_bucket_with_config_example --format json",
+			Command: "tofulint --only aws_s3_bucket_with_config_example --format json",
 			Dir:     "rule-config",
 		},
 		{
 			Name:    "rule config without required attributes",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "rule-required-config",
 		},
 		{
 			Name:    "rule config without optional attributes",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "rule-optional-config",
 		},
 		{
 			Name:    "enable plugin by CLI",
-			Command: "tflint --enable-plugin testing --format json",
+			Command: "tofulint --enable-plugin testing --format json",
 			Dir:     "enable-plugin-by-cli",
 		},
 		{
 			Name:    "eval on root context",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "eval-on-root-context",
 		},
 		{
 			Name:    "sensitve variable",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "sensitive",
 		},
 		{
 			Name:    "just attributes",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "just-attributes",
 		},
 		{
 			Name:    "incompatible host version",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "incompatible-host",
 		},
 		{
 			Name:    "expand resources/modules",
-			Command: "tflint --format json",
+			Command: "tofulint --format json",
 			Dir:     "expand",
 		},
 		{
 			Name:    "chdir",
-			Command: "tflint --chdir dir --var-file from_cli.tfvars --format json",
+			Command: "tofulint --chdir dir --var-file from_cli.tfvars --format json",
 			Dir:     "chdir",
 		},
 		{
 			Name:    "recursive",
-			Command: "tflint --recursive --format json",
+			Command: "tofulint --recursive --format json",
 			Dir:     "recursive",
 		},
 	}
 
 	// Disable the bundled plugin because the `os.Executable()` is go(1) in the tests
-	tflint.DisableBundledPlugin = true
+	tofulint.DisableBundledPlugin = true
 	defer func() {
-		tflint.DisableBundledPlugin = false
+		tofulint.DisableBundledPlugin = false
 	}()
 
 	dir, _ := os.Getwd()
@@ -285,7 +285,7 @@ func readResultFile(dir string) ([]byte, error) {
 
 	want := new(bytes.Buffer)
 	tmpl := template.Must(template.ParseFiles(filepath.Join(dir, resultFile)))
-	if err := tmpl.Execute(want, meta{Version: tflint.Version.String()}); err != nil {
+	if err := tmpl.Execute(want, meta{Version: tofulint.Version.String()}); err != nil {
 		return nil, err
 	}
 	return want.Bytes(), nil

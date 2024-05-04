@@ -1,3 +1,3 @@
-# tflint-ignore: terraform_autofix_comment
+# tofulint-ignore: terraform_autofix_comment
 // autofixed
 // autofixed

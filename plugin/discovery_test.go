@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_Discovery(t *testing.T) {
@@ -20,7 +20,7 @@ func Test_Discovery(t *testing.T) {
 	defer func() { PluginRoot = original }()
 
 	plugin, err := Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: true,
@@ -63,7 +63,7 @@ func Test_Discovery_local(t *testing.T) {
 	}
 
 	plugin, err := Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: false,
@@ -95,11 +95,11 @@ func Test_Discovery_envVar(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	os.Setenv("TFLINT_PLUGIN_DIR", filepath.Join(cwd, "test-fixtures", "locals", ".tflint.d", "plugins"))
-	defer os.Setenv("TFLINT_PLUGIN_DIR", "")
+	os.Setenv("TOFULINT_PLUGIN_DIR", filepath.Join(cwd, "test-fixtures", "locals", ".tofulint.d", "plugins"))
+	defer os.Setenv("TOFULINT_PLUGIN_DIR", "")
 
 	plugin, err := Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: true,
@@ -132,8 +132,8 @@ func Test_Discovery_pluginDirConfig(t *testing.T) {
 	}
 
 	plugin, err := Discovery(&tflint.Config{
-		PluginDir: filepath.Join(cwd, "test-fixtures", "locals", ".tflint.d", "plugins"),
-		Plugins: map[string]*tflint.PluginConfig{
+		PluginDir: filepath.Join(cwd, "test-fixtures", "locals", ".tofulint.d", "plugins"),
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: true,
@@ -180,7 +180,7 @@ func Test_Discovery_notFound(t *testing.T) {
 	defer func() { PluginRoot = original }()
 
 	_, err = Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: true,
@@ -218,7 +218,7 @@ func Test_Discovery_plugin_name_is_directory(t *testing.T) {
 	defer func() { PluginRoot = original }()
 
 	_, err = Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: true,
@@ -256,7 +256,7 @@ func Test_Discovery_notFoundForAutoInstallation(t *testing.T) {
 	defer func() { PluginRoot = original }()
 
 	_, err = Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"foo": {
 				Name:    "foo",
 				Enabled: true,
@@ -296,7 +296,7 @@ func Test_Discovery_bundledPluginWithVersion(t *testing.T) {
 	defer func() { PluginRoot = original }()
 
 	_, err = Discovery(&tflint.Config{
-		Plugins: map[string]*tflint.PluginConfig{
+		Plugins: map[string]*tofulint.PluginConfig{
 			"terraform": {
 				Name:    "terraform",
 				Enabled: true,
@@ -418,9 +418,9 @@ func Test_FindPluginPath_envVar(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	dir := filepath.Join(cwd, "test-fixtures", "locals", ".tflint.d", "plugins")
-	os.Setenv("TFLINT_PLUGIN_DIR", dir)
-	defer os.Setenv("TFLINT_PLUGIN_DIR", "")
+	dir := filepath.Join(cwd, "test-fixtures", "locals", ".tofulint.d", "plugins")
+	os.Setenv("TOFULINT_PLUGIN_DIR", dir)
+	defer os.Setenv("TOFULINT_PLUGIN_DIR", "")
 
 	cases := []struct {
 		Name     string
@@ -464,7 +464,7 @@ func Test_FindPluginPath_pluginDirConfig(t *testing.T) {
 	}
 
 	globalConfig := tflint.EmptyConfig()
-	globalConfig.PluginDir = filepath.Join(cwd, "test-fixtures", "locals", ".tflint.d", "plugins")
+	globalConfig.PluginDir = filepath.Join(cwd, "test-fixtures", "locals", ".tofulint.d", "plugins")
 
 	cases := []struct {
 		Name     string

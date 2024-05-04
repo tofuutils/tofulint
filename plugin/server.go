@@ -10,15 +10,15 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/plugin/plugin2host"
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/terraform-linters/tflint/terraform"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/terraform"
+	"github.com/tofuutils/tofulint/tofulint"
 	"github.com/zclconf/go-cty/cty"
 )
 
 // GRPCServer is a gRPC server for responding to requests from plugins.
 type GRPCServer struct {
-	runner           *tflint.Runner
-	rootRunner       *tflint.Runner
+	runner           *tofulint.Runner
+	rootRunner       *tofulint.Runner
 	files            map[string]*hcl.File
 	clientSDKVersion *version.Version
 }
@@ -26,7 +26,7 @@ type GRPCServer struct {
 var _ plugin2host.Server = (*GRPCServer)(nil)
 
 // NewGRPCServer initializes a gRPC server for plugins.
-func NewGRPCServer(runner *tflint.Runner, rootRunner *tflint.Runner, files map[string]*hcl.File, sdkVersion *version.Version) *GRPCServer {
+func NewGRPCServer(runner *tofulint.Runner, rootRunner *tofulint.Runner, files map[string]*hcl.File, sdkVersion *version.Version) *GRPCServer {
 	return &GRPCServer{runner: runner, rootRunner: rootRunner, files: files, clientSDKVersion: sdkVersion}
 }
 
@@ -122,7 +122,7 @@ func (s *GRPCServer) GetRuleConfigContent(name string, bodyS *hclext.BodySchema)
 
 // EvaluateExpr returns the value of the passed expression.
 func (s *GRPCServer) EvaluateExpr(expr hcl.Expression, opts sdk.EvaluateExprOption) (cty.Value, error) {
-	var runner *tflint.Runner
+	var runner *tofulint.Runner
 	switch opts.ModuleCtx {
 	case sdk.SelfModuleCtxType:
 		runner = s.runner

@@ -10,7 +10,7 @@ test: prepare
 
 build:
 	mkdir -p dist
-	go build -v -o dist/tflint
+	go build -v -o dist/tofulint
 
 install:
 	go install
@@ -20,7 +20,7 @@ e2e: prepare install
 
 lint:
 	golangci-lint run ./...
-	cd terraform/ && golangci-lint run ./...
+	cd tofu/ && golangci-lint run ./...
 
 clean:
 	rm -rf dist/

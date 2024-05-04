@@ -39,5 +39,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
-        name: tflint-${{ matrix.os }}
-        path: dist/tflint
+        name: tofulint-${{ matrix.os }}
+        path: dist/tofulint

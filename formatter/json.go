@@ -7,7 +7,7 @@ import (
 
 	"github.com/hashicorp/hcl/v2"
 	sdk "github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 // JSONIssue is a temporary structure for converting TFLint issues to JSON.
@@ -52,7 +52,7 @@ type JSONOutput struct {
 	Errors []JSONError `json:"errors"`
 }
 
-func (f *Formatter) jsonPrint(issues tflint.Issues, appErr error) {
+func (f *Formatter) jsonPrint(issues tofulint.Issues, appErr error) {
 	ret := &JSONOutput{Issues: make([]JSONIssue, len(issues)), Errors: []JSONError{}}
 
 	for idx, issue := range issues.Sort() {

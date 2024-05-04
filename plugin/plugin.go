@@ -9,8 +9,8 @@ import (
 // PluginRoot is the root directory of the plugins
 // This variable is exposed for testing.
 var (
-	PluginRoot      = "~/.tflint.d/plugins"
-	localPluginRoot = "./.tflint.d/plugins"
+	PluginRoot      = "~/.tofulint.d/plugins"
+	localPluginRoot = "./.tofulint.d/plugins"
 )
 
 // SDKVersionConstraints is the version constraint of the supported SDK version.

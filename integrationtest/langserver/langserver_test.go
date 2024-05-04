@@ -13,9 +13,9 @@ import (
 	"github.com/hashicorp/logutils"
 	lsp "github.com/sourcegraph/go-lsp"
 	"github.com/sourcegraph/jsonrpc2"
-	"github.com/terraform-linters/tflint/langserver"
-	"github.com/terraform-linters/tflint/plugin"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/langserver"
+	"github.com/tofuutils/tofulint/plugin"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 type jsonrpcMessage struct {
@@ -27,9 +27,9 @@ type jsonrpcMessage struct {
 
 func TestMain(m *testing.M) {
 	// Disable the bundled plugin because the `os.Executable()` is go(1) in the tests
-	tflint.DisableBundledPlugin = true
+	tofulint.DisableBundledPlugin = true
 	defer func() {
-		tflint.DisableBundledPlugin = false
+		tofulint.DisableBundledPlugin = false
 	}()
 
 	filter := &logutils.LevelFilter{
@@ -42,7 +42,7 @@ func TestMain(m *testing.M) {
 }
 
 func startServer(t *testing.T, configPath string) (io.Writer, io.Reader, *plugin.Plugin) {
-	handler, plugin, err := langserver.NewHandler(configPath, tflint.EmptyConfig())
+	handler, plugin, err := langserver.NewHandler(configPath, tofulint.EmptyConfig())
 	if err != nil {
 		t.Fatal(err)
 	}

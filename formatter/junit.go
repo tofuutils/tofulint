@@ -5,12 +5,12 @@ import (
 	"fmt"
 
 	"github.com/jstemmer/go-junit-report/formatter"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 // https://www.ibm.com/docs/en/developer-for-zos/14.1.0?topic=formats-junit-xml-format
 
-func (f *Formatter) junitPrint(issues tflint.Issues, appErr error, sources map[string][]byte) {
+func (f *Formatter) junitPrint(issues tofulint.Issues, appErr error, sources map[string][]byte) {
 	cases := make([]formatter.JUnitTestCase, len(issues))
 
 	for i, issue := range issues.Sort() {

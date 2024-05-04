@@ -1,4 +1,4 @@
-module github.com/terraform-linters/tflint
+module github.com/tofuutils/tofulint
 
 go 1.21.1
 

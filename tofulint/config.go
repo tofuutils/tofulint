@@ -17,8 +17,8 @@ import (
 	"github.com/terraform-linters/tflint/terraform"
 )
 
-var defaultConfigFile = ".tflint.hcl"
-var fallbackConfigFile = "~/.tflint.hcl"
+var defaultConfigFile = ".tofulint.hcl"
+var fallbackConfigFile = "~/.tofulint.hcl"
 
 var configSchema = &hcl.BodySchema{
 	Blocks: []hcl.BlockHeaderSchema{
@@ -128,9 +128,9 @@ func EmptyConfig() *Config {
 // The priority of the configuration files is as follows:
 //
 // 1. file passed by the --config option
-// 2. file set by the TFLINT_CONFIG_FILE environment variable
-// 3. current directory (./.tflint.hcl)
-// 4. home directory (~/.tflint.hcl)
+// 2. file set by the TOFULINT_CONFIG_FILE environment variable
+// 3. current directory (./.tofulint.hcl)
+// 4. home directory (~/.tofulint.hcl)
 //
 // For 1 and 2, if the file does not exist, an error will be returned immediately.
 // If 3 fails, fallback to 4, and If it fails, an empty configuration is returned.
@@ -153,9 +153,9 @@ func LoadConfig(fs afero.Afero, file string) (*Config, error) {
 	}
 
 	// Load the file set by the environment variable
-	envFile := os.Getenv("TFLINT_CONFIG_FILE")
+	envFile := os.Getenv("TOFULINT_CONFIG_FILE")
 	if envFile != "" {
-		log.Printf("[INFO] Found TFLINT_CONFIG_FILE. Load config: %s", envFile)
+		log.Printf("[INFO] Found TOFULINT_CONFIG_FILE. Load config: %s", envFile)
 		f, err := fs.Open(envFile)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load file: %w", err)

@@ -26,22 +26,22 @@ jobs:
     - name: Install latest version
       run: |
         ./install_linux.sh
-        tflint -v
+        tofulint -v
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install specific version
       env:
-        TFLINT_VERSION: v0.15.0
+        TOFULINT_VERSION: v0.15.0
       run: |
         ./install_linux.sh
-        tflint -v
+        tofulint -v
     - name: Install to custom path
       run: |
-        mkdir "$TFLINT_INSTALL_PATH"
+        mkdir "$TOFULINT_INSTALL_PATH"
         ./install_linux.sh
-        "$TFLINT_INSTALL_PATH/tflint" -v
+        "$TOFULINT_INSTALL_PATH/tofulint" -v
       env:
-        TFLINT_INSTALL_PATH: ${{ github.workspace }}/install-path
+        TOFULINT_INSTALL_PATH: ${{ github.workspace }}/install-path
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: bash
     - name: Non-existent version
@@ -51,9 +51,9 @@ jobs:
       # Passing scripts via stdin can have differing behavior from passing as a file arg
       run: |
         bash < install_linux.sh
-        tflint -v
+        tofulint -v
       env:
-        TFLINT_VERSION: vBROKEN
+        TOFULINT_VERSION: vBROKEN
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Check failure
       if: steps.fail.outcome != 'failure'
@@ -64,7 +64,7 @@ jobs:
   container:
     runs-on: ubuntu-latest
     container:
-      image: hashicorp/terraform
+      image: opentofu
       options: --user 0
     steps:
     - name: Checkout
@@ -75,12 +75,12 @@ jobs:
     - name: Install latest version
       run: |
         ./install_linux.sh
-        tflint -v
+        tofulint -v
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install specific version
       env:
-        TFLINT_VERSION: v0.15.0
+        TOFULINT_VERSION: v0.15.0
       run: |
         ./install_linux.sh
-        tflint -v
+        tofulint -v

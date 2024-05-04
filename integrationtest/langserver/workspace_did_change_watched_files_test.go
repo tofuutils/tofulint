@@ -35,12 +35,12 @@ rule "aws_instance_example_type" {
 		if err := os.WriteFile(dir+"/main.tf", []byte(content), os.ModePerm); err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(dir+"/.tflint.hcl", []byte(config), os.ModePerm); err != nil {
+		if err := os.WriteFile(dir+"/.tofulint.hcl", []byte(config), os.ModePerm); err != nil {
 			t.Fatal(err)
 		}
 		uri := pathToURI(dir + "/main.tf")
 
-		stdin, stdout, plugin := startServer(t, dir+"/.tflint.hcl")
+		stdin, stdout, plugin := startServer(t, dir+"/.tofulint.hcl")
 		defer plugin.Clean()
 
 		req, err := json.Marshal(jsonrpcMessage{
@@ -49,7 +49,7 @@ rule "aws_instance_example_type" {
 			Params: lsp.DidChangeWatchedFilesParams{
 				Changes: []lsp.FileEvent{
 					{
-						URI:  lsp.DocumentURI(dir + "/.tflint.hcl"),
+						URI:  lsp.DocumentURI(dir + "/.tofulint.hcl"),
 						Type: int(lsp.Created),
 					},
 				},
@@ -64,7 +64,7 @@ rule "aws_instance_example_type" {
 			fmt.Fprint(stdin, initializeRequest())
 			fmt.Fprint(stdin, didOpenRequest(uri, content, t))
 			// Change config file from outside of LSP
-			_ = os.WriteFile(dir+"/.tflint.hcl", []byte(changedConfig), os.ModePerm)
+			_ = os.WriteFile(dir+"/.tofulint.hcl", []byte(changedConfig), os.ModePerm)
 			fmt.Fprint(stdin, toJSONRPC2(string(req)))
 			fmt.Fprint(stdin, shutdownRequest())
 			fmt.Fprint(stdin, exitRequest())
@@ -107,11 +107,11 @@ instance_type = "t1.2xlarge"
 plugin "testing" {
     enabled = true
 }`
-		if err := os.WriteFile(dir+"/.tflint.hcl", []byte(config), os.ModePerm); err != nil {
+		if err := os.WriteFile(dir+"/.tofulint.hcl", []byte(config), os.ModePerm); err != nil {
 			t.Fatal(err)
 		}
 
-		stdin, stdout, plugin := startServer(t, dir+"/.tflint.hcl")
+		stdin, stdout, plugin := startServer(t, dir+"/.tofulint.hcl")
 		defer plugin.Clean()
 
 		req, err := json.Marshal(jsonrpcMessage{

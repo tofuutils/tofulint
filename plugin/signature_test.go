@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_GetSigningKey(t *testing.T) {

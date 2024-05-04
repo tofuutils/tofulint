@@ -5,25 +5,25 @@ import (
 	"testing"
 
 	hcl "github.com/hashicorp/hcl/v2"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func Test_checkstylePrint(t *testing.T) {
 	cases := []struct {
 		Name   string
-		Issues tflint.Issues
+		Issues tofulint.Issues
 		Error  error
 		Stdout string
 	}{
 		{
 			Name:   "no issues",
-			Issues: tflint.Issues{},
+			Issues: tofulint.Issues{},
 			Stdout: `<?xml version="1.0" encoding="UTF-8"?>
 <checkstyle></checkstyle>`,
 		},
 		{
 			Name: "issues",
-			Issues: tflint.Issues{
+			Issues: tofulint.Issues{
 				{
 					Rule:    &testRule{},
 					Message: "test",

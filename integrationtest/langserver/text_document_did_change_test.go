@@ -19,7 +19,7 @@ func Test_textDocumentDidChange(t *testing.T) {
 		}
 		uri := pathToURI(dir + "/main.tf")
 
-		stdin, stdout, plugin := startServer(t, dir+"/.tflint.hcl")
+		stdin, stdout, plugin := startServer(t, dir+"/.tofulint.hcl")
 		defer plugin.Clean()
 
 		req, err := json.Marshal(jsonrpcMessage{

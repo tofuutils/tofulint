@@ -14,7 +14,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	"github.com/terraform-linters/tflint/formatter"
 	"github.com/terraform-linters/tflint/terraform"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 // Exit codes are int values that represent an exit code for a particular error.
@@ -33,7 +33,7 @@ type CLI struct {
 	sources              map[string][]byte
 
 	// fields for each module
-	config    *tflint.Config
+	config    *tofulint.Config
 	loader    *terraform.Loader
 	formatter *formatter.Formatter
 }
@@ -72,7 +72,7 @@ func (cli *CLI) Run(args []string) int {
 		color.NoColor = true
 		cli.formatter.NoColor = true
 	}
-	level := os.Getenv("TFLINT_LOG")
+	level := os.Getenv("TOFULINT_LOG")
 	log.SetOutput(&logutils.LevelFilter{
 		Levels:   []logutils.LogLevel{"TRACE", "DEBUG", "INFO", "WARN", "ERROR"},
 		MinLevel: logutils.LogLevel(strings.ToUpper(level)),
@@ -85,11 +85,11 @@ func (cli *CLI) Run(args []string) int {
 			fmt.Fprintln(cli.outStream, err)
 			return ExitCodeOK
 		}
-		cli.formatter.Print(tflint.Issues{}, fmt.Errorf("Failed to parse CLI options; %w", err), map[string][]byte{})
+		cli.formatter.Print(tofulint.Issues{}, fmt.Errorf("Failed to parse CLI options; %w", err), map[string][]byte{})
 		return ExitCodeError
 	}
 	if len(args) > 1 {
-		cli.formatter.Print(tflint.Issues{}, fmt.Errorf("Command line arguments support was dropped in v0.47. Use --chdir or --filter instead."), map[string][]byte{})
+		cli.formatter.Print(tofulint.Issues{}, fmt.Errorf("Command line arguments support was dropped in v0.47. Use --chdir or --filter instead."), map[string][]byte{})
 		return ExitCodeError
 	}
 
@@ -109,7 +109,7 @@ func (cli *CLI) Run(args []string) int {
 
 func unknownOptionHandler(option string, arg flags.SplitArgument, args []string) ([]string, error) {
 	if option == "debug" {
-		return []string{}, errors.New("--debug option was removed in v0.8.0. Please set TFLINT_LOG environment variables instead")
+		return []string{}, errors.New("--debug option was removed in v0.8.0. Please set TOFULINT_LOG environment variables instead")
 	}
 	if option == "error-with-issues" {
 		return []string{}, errors.New("--error-with-issues option was removed in v0.9.0. The behavior is now default")
@@ -127,7 +127,7 @@ func unknownOptionHandler(option string, arg flags.SplitArgument, args []string)
 		return []string{}, fmt.Errorf("--%s option was removed in v0.23.0. AWS rules are provided by the AWS plugin, so please configure the plugin instead", option)
 	}
 	if option == "loglevel" {
-		return []string{}, errors.New("--loglevel option was removed in v0.40.0. Please set TFLINT_LOG environment variables instead")
+		return []string{}, errors.New("--loglevel option was removed in v0.40.0. Please set TOFULINT_LOG environment variables instead")
 	}
 	return []string{}, fmt.Errorf(`--%s is unknown option. Please run "tflint --help"`, option)
 }

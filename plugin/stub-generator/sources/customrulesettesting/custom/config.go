@@ -1,7 +1,7 @@
 package custom
 
 type Config struct {
-	// From .tflint.hcl
+	// From .tofulint.hcl
 	DeepCheck bool  `hclext:"deep_check,optional"`
 	Auth      *Auth `hclext:"auth,block"`
 

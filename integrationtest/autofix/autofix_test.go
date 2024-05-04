@@ -13,9 +13,9 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/terraform-linters/tflint/cmd"
-	"github.com/terraform-linters/tflint/formatter"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/cmd"
+	"github.com/tofuutils/tofulint/formatter"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 func TestMain(m *testing.M) {
@@ -32,60 +32,60 @@ func TestIntegration(t *testing.T) {
 	}{
 		{
 			Name:    "simple fix",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "simple",
 		},
 		{
 			Name:    "multiple fix in a file",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "multiple_fix",
 		},
 		{
 			Name:    "ignore by annotation",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "ignore_by_annotation",
 		},
 		{
 			Name:    "multiple fix by multiple rules",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "fix_by_multiple_rules",
 		},
 		{
 			Name:    "conflict fix by multiple rules",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "conflict_fix",
 		},
 		{
 			Name:    "fix in multiple files",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "multiple_files",
 		},
 		{
 			Name:    "calling modules",
-			Command: "./tflint --format json --fix",
+			Command: "./tofulint --format json --fix",
 			Dir:     "module",
 		},
 		{
 			Name:    "--chdir",
-			Command: "./tflint --chdir=dir --format json --fix",
+			Command: "./tofulint --chdir=dir --format json --fix",
 			Dir:     "chdir",
 		},
 		{
 			Name:    "--chdir with conflict",
-			Command: "./tflint --chdir=dir --format json --fix",
+			Command: "./tofulint --chdir=dir --format json --fix",
 			Dir:     "chdir_with_conflict",
 		},
 		{
 			Name:    "--filter",
-			Command: "./tflint --format json --fix --filter=main.tf",
+			Command: "./tofulint --format json --fix --filter=main.tf",
 			Dir:     "filter",
 		},
 	}
 
 	// Disable the bundled plugin because the `os.Executable()` is go(1) in the tests
-	tflint.DisableBundledPlugin = true
+	tofulint.DisableBundledPlugin = true
 	defer func() {
-		tflint.DisableBundledPlugin = false
+		tofulint.DisableBundledPlugin = false
 	}()
 
 	dir, _ := os.Getwd()

@@ -1,9 +1,9 @@
 # Autofix
 
-Some issues reported by TFLint can be auto-fixable. Auto-fixable issues are marked as "Fixable" as follows:
+Some issues reported by TofuLint can be auto-fixable. Auto-fixable issues are marked as "Fixable" as follows:
 
 ```console
-$ tflint
+$ tofulint
 1 issue(s) found:
 
 Warning: [Fixable] Single line comments should begin with # (terraform_comment_syntax)
@@ -14,10 +14,10 @@ Warning: [Fixable] Single line comments should begin with # (terraform_comment_s
 
 ```
 
-When run with the `--fix` option, TFLint will fix issues automatically.
+When run with the `--fix` option, TofuLint will fix issues automatically.
 
 ```console
-$ tflint --fix
+$ tofulint --fix
 1 issue(s) found:
 
 Warning: [Fixed] Single line comments should begin with # (terraform_comment_syntax)

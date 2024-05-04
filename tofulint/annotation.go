@@ -33,7 +33,7 @@ func NewAnnotations(path string, file *hcl.File) (Annotations, hcl.Diagnostics) 
 			continue
 		}
 
-		// tflint-ignore annotation
+		// tofulint-ignore annotation
 		match := lineAnnotationPattern.FindStringSubmatch(string(token.Bytes))
 		if len(match) == 2 {
 			ret = append(ret, &LineAnnotation{
@@ -43,14 +43,14 @@ func NewAnnotations(path string, file *hcl.File) (Annotations, hcl.Diagnostics) 
 			continue
 		}
 
-		// tflint-ignore-file annotation
+		// tofulint-ignore-file annotation
 		match = fileAnnotationPattern.FindStringSubmatch(string(token.Bytes))
 		if len(match) == 2 {
 			if !(token.Range.Start.Line == 1 && token.Range.Start.Column == 1) {
 				diags = append(diags, &hcl.Diagnostic{
 					Severity: hcl.DiagError,
-					Summary:  "tflint-ignore-file annotation must be written at the top of file",
-					Detail:   fmt.Sprintf("tflint-ignore-file annotation is written at line %d, column %d", token.Range.Start.Line, token.Range.Start.Column),
+					Summary:  "tofulint-ignore-file annotation must be written at the top of file",
+					Detail:   fmt.Sprintf("tofulint-ignore-file annotation is written at line %d, column %d", token.Range.Start.Line, token.Range.Start.Column),
 					Subject:  token.Range.Ptr(),
 				})
 				continue
@@ -66,7 +66,7 @@ func NewAnnotations(path string, file *hcl.File) (Annotations, hcl.Diagnostics) 
 	return ret, diags
 }
 
-var lineAnnotationPattern = regexp.MustCompile(`tflint-ignore: ([^\n*/#]+)`)
+var lineAnnotationPattern = regexp.MustCompile(`tofulint-ignore: ([^\n*/#]+)`)
 
 // LineAnnotation is an annotation for ignoring issues in a line
 type LineAnnotation struct {
@@ -98,10 +98,10 @@ func (a *LineAnnotation) IsAffected(issue *Issue) bool {
 
 // String returns the string representation of the annotation
 func (a *LineAnnotation) String() string {
-	return fmt.Sprintf("tflint-ignore: %s (%s)", a.Content, a.Token.Range.String())
+	return fmt.Sprintf("tofulint-ignore: %s (%s)", a.Content, a.Token.Range.String())
 }
 
-var fileAnnotationPattern = regexp.MustCompile(`tflint-ignore-file: ([^\n*/#]+)`)
+var fileAnnotationPattern = regexp.MustCompile(`tofulint-ignore-file: ([^\n*/#]+)`)
 
 // FileAnnotation is an annotation for ignoring issues in a file
 type FileAnnotation struct {
@@ -128,5 +128,5 @@ func (a *FileAnnotation) IsAffected(issue *Issue) bool {
 
 // String returns the string representation of the annotation
 func (a *FileAnnotation) String() string {
-	return fmt.Sprintf("tflint-ignore-file: %s (%s)", a.Content, a.Token.Range.String())
+	return fmt.Sprintf("tofulint-ignore-file: %s (%s)", a.Content, a.Token.Range.String())
 }

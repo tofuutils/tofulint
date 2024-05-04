@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 type checkstyleError struct {
@@ -26,7 +26,7 @@ type checkstyle struct {
 	Files   []*checkstyleFile `xml:"file"`
 }
 
-func (f *Formatter) checkstylePrint(issues tflint.Issues, appErr error, sources map[string][]byte) {
+func (f *Formatter) checkstylePrint(issues tofulint.Issues, appErr error, sources map[string][]byte) {
 	files := map[string]*checkstyleFile{}
 	for _, issue := range issues {
 		cherr := &checkstyleError{

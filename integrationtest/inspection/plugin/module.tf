@@ -12,7 +12,7 @@ module "instances" {
   source = "./module"
 
   unknown = var.unknown
-  // tflint-ignore: aws_instance_example_type
+  // tofulint-ignore: aws_instance_example_type
   enable = true
   instance_type = var.instance_type
 }

@@ -13,14 +13,14 @@ import (
 	plugin "github.com/hashicorp/go-plugin"
 	"github.com/mitchellh/go-homedir"
 	"github.com/terraform-linters/tflint-plugin-sdk/plugin/host2plugin"
-	"github.com/terraform-linters/tflint/tflint"
+	"github.com/tofuutils/tofulint/tofulint"
 )
 
 // Discovery searches and launches plugins according the passed configuration.
 // If the plugin is not enabled, skip without starting.
 // The Terraform Language plugin is treated specially. Plugins for which no version
 // is specified will launch the bundled plugin instead of returning an error.
-func Discovery(config *tflint.Config) (*Plugin, error) {
+func Discovery(config *tofulint.Config) (*Plugin, error) {
 	clients := map[string]*plugin.Client{}
 	rulesets := map[string]*host2plugin.Client{}
 
@@ -44,7 +44,7 @@ func Discovery(config *tflint.Config) (*Plugin, error) {
 					}
 					return nil, fmt.Errorf(`Plugin "%s" not found in %s`, pluginCfg.Name, pluginDir)
 				}
-				return nil, fmt.Errorf(`Plugin "%s" not found. Did you run "tflint --init"?`, pluginCfg.Name)
+				return nil, fmt.Errorf(`Plugin "%s" not found. Did you run "tofulint --init"?`, pluginCfg.Name)
 			}
 		} else {
 			cmd = exec.Command(pluginPath)
@@ -95,18 +95,18 @@ func FindPluginPath(config *InstallConfig) (string, error) {
 // Adopted with the following priorities:
 //
 //  1. `plugin_dir` in a global config
-//  2. `TFLINT_PLUGIN_DIR` environment variable
-//  3. Current directory (./.tflint.d/plugins)
-//  4. Home directory (~/.tflint.d/plugins)
+//  2. `TOFULINT_PLUGIN_DIR` environment variable
+//  3. Current directory (./.tofulint.d/plugins)
+//  4. Home directory (~/.tofulint.d/plugins)
 //
 // If the environment variable is set, other directories will not be considered,
 // but if the current directory does not exist, it will fallback to the home directory.
-func getPluginDir(cfg *tflint.Config) (string, error) {
+func getPluginDir(cfg *tofulint.Config) (string, error) {
 	if cfg.PluginDir != "" {
 		return homedir.Expand(cfg.PluginDir)
 	}
 
-	if dir := os.Getenv("TFLINT_PLUGIN_DIR"); dir != "" {
+	if dir := os.Getenv("TOFULINT_PLUGIN_DIR"); dir != "" {
 		return dir, nil
 	}
 
@@ -147,7 +147,7 @@ func checkPluginExistance(path string) (string, error) {
 	return path, nil
 }
 
-func pluginClientError(err error, config *tflint.PluginConfig) error {
+func pluginClientError(err error, config *tofulint.PluginConfig) error {
 	if err == nil {
 		return nil
 	}
@@ -159,7 +159,7 @@ func pluginClientError(err error, config *tflint.PluginConfig) error {
 		message = strings.Replace(
 			message,
 			search,
-			fmt.Sprintf(`TFLint is not compatible with this version of the %q plugin. A newer TFLint or plugin version may be required.`, config.Name),
+			fmt.Sprintf(`TofuLint is not compatible with this version of the %q plugin. A newer TofuLint or plugin version may be required.`, config.Name),
 			-1,
 		)
 

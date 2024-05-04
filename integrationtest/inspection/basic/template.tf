@@ -3,6 +3,6 @@ resource "aws_instance" "foo" {
 }
 
 resource "aws_instance" "bar" {
-  // tflint-ignore: aws_instance_example_type
+  // tofulint-ignore: aws_instance_example_type
   instance_type = "t2.micro"
 }
